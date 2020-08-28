@@ -14,5 +14,6 @@ int process_esb_request(char* bmd_file_path) {
      * a separate module. Suitable unit tests should be created for all
      * the modules, including this one.
      */
+   status=processXML(bmd_file_path);
     return status;
 }
