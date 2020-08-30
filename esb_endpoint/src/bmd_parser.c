@@ -15,7 +15,6 @@
 
 
 #include <stdio.h>
-#include <string.h>
 #include <libxml/xmlreader.h>
 #include <bmd_parser.h>
 #include <ctype.h>
@@ -80,7 +79,6 @@ process_envelope_nodes(xmlTextReaderPtr reader)
 
     value = xmlTextReaderConstValue(reader);
 
-<<<<<<< HEAD
     int ret = 0;
     // printf("%d %d %s %d %d\n",
     //        xmlTextReaderDepth(reader),
@@ -223,23 +221,15 @@ process_envelope_nodes(xmlTextReaderPtr reader)
         else
 	    printf(" %s\n", value);
     }*/
-=======
-    //printf("%s", name);
-    if (value != NULL)
-	{
-	    printf(" %s", value);
-    	}
->>>>>>> 72f9d84c23e22259ea69e513f5d5d6976ddefcc7
 }
 
 /**
  * streamFile:
  * @filename: the file name to parse
  *
- * Parse and print information about an XML file.
+ * Parse, validate and print information about an XML file.
  */
 static void
-<<<<<<< HEAD
 streamFile(const char *bmd_file_path)
 {
     xmlTextReaderPtr reader;
@@ -256,21 +246,12 @@ streamFile(const char *bmd_file_path)
     if (reader != NULL)
     {
 
-=======
-streamFile(const char *filename) {
-    xmlTextReaderPtr reader;
-    int ret;
-
-    reader = xmlReaderForFile(filename, NULL, 0);
-    if (reader != NULL) {
->>>>>>> 72f9d84c23e22259ea69e513f5d5d6976ddefcc7
         ret = xmlTextReaderRead(reader);
         while (ret == 1)
         {
             process_envelope_nodes(reader);
             ret = xmlTextReaderRead(reader);
         }
-<<<<<<< HEAD
         /*
 	 * Once the document has been fully parsed check the validation results
 	 */
@@ -294,21 +275,6 @@ int processXML(char *bmd_file_path)
 {
 
     bmd_file_path = "/Users/akshay/HelloABC.xml";
-=======
-        xmlFreeTextReader(reader);
-        if (ret != 0) {
-            fprintf(stderr, "%s : failed to parse\n", filename);
-        }
-    } else {
-        fprintf(stderr, "Unable to open %s\n", filename);
-    }
-}
-
-int processXML(char *bmd_file_path) {
-   bmd_file_path = "/home/utkarsh/Documents/jhelum-master/esb_endpoint/src/bmd.xml";
-   printf("Called processXML with path: %s\n", bmd_file_path);
-
->>>>>>> 72f9d84c23e22259ea69e513f5d5d6976ddefcc7
     /*
      * this initialize the library and check potential ABI mismatches
      * between the version it was compiled for and the actual shared
