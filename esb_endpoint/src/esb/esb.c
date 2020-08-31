@@ -1,6 +1,8 @@
 #include<stdio.h>
 #include "email.h"
-
+#include <bmd_parser.h>
+#include <esb.h>
+#include <stdlib.h>
 /**
  * This is the main entry point into the ESB. 
  * It will start processing of a BMD received at the HTTP endpoint.
@@ -14,6 +16,10 @@ int process_esb_request(char* bmd_file_path) {
      * a separate module. Suitable unit tests should be created for all
      * the modules, including this one.
      */
-   status=processXML(bmd_file_path);
-    return status;
+    BMD *bmd; 
+    bmd=processXML(bmd_file_path);      //To retrieve envelope bmd->bmd_envelope ,For payload use bmd->bmd_payload;
+     
+     printf("BMD retrieved");        //Weird behaviour --> print statement gets executed only while printing some bmd elements 
+                                      //Add printf("%s",bmd->bmd_envelope->MessageID);
+     return status;
 }
