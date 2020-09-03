@@ -5,8 +5,8 @@
 #include <mysql.h>
 #include <stdio.h>
 #include <string.h>
-
-void sqlcon() {
+#include <bmd_parser.h>
+void sqlcon(BMD *bmd) {
 	MYSQL *conn;
 	MYSQL_RES *res;
 	MYSQL_ROW row;
@@ -17,17 +17,39 @@ void sqlcon() {
 	char *password = "password"; /* set me first */
 	char *database = "esb_db";
 
-	int8_t Message_ID = 1;
-	int8_t sender_id[] = "1100";
-	int8_t dest_id[] = "2100";
-  	int8_t Message_Type[] = "1message";
- 	int8_t reference_id[] = "1100200";
-  	int8_t message_id[] = "11010";
-  	int8_t received_on[] = "2017-02-18";
-  	int8_t data_location[] = "1mumbai";
-  	int8_t status[] = "negative1";
-  	int8_t status_details[] = "1inprocess";
-  	char query[1000];
+	 int8_t ID = 1;
+	// int8_t sender_id[] = "1100";
+	// int8_t dest_id[] = "2100";
+  	// int8_t Message_Type[] = "1message";
+ 	// int8_t reference_id[] = "1100200";
+  	// int8_t message_id[] = "11010";
+  	 int8_t received_temp[100]; //= "2020-08-12 05:18:00+0000";
+  	 int8_t received_on[100];
+  	 strcpy(received_temp,bmd->bmd_envelope->CreationDateTime);
+  	// int8_t data_location[] = "1mumbai";
+  	// int8_t status[] = "negative1";
+  	// int8_t status_details[] = "1inprocess";
+  	// char query[1000];
+  	
+  	/*Changing DateTime format*/
+  	int n = strlen(received_temp);
+  	int j=0;
+  	for(int i=0;i<=n; i++)
+  	{
+  		received_on[j] = received_temp[i];
+  		if(received_on[i]=='T')		//test for character
+		{
+			received_on[i] = ' '; // write next character back to current position
+		}
+		if(i==n-3)
+		{
+			char ch = ':';
+		  	strncat(received_on, &ch, 1); 
+		  	j++;			
+		}
+		j++;
+	}
+  	
 	
 	
 	conn = mysql_init(NULL);
@@ -69,7 +91,7 @@ void sqlcon() {
 	 
 	 /*output column names*/
 	 
-	 while(row = mysql_fetch_row(res))
+	 while( (row = mysql_fetch_row(res)))
 	 {
 	     printf("%s ", row[0]);
 	 }
@@ -81,7 +103,7 @@ void sqlcon() {
 	 
 	 /*sql query to delete in table*/
 	 
-	if (mysql_query(conn, "DELETE FROM esb_request WHERE data_location = '1mumbai'")) //to maintain non duplicay temporarily
+	if (mysql_query(conn, "DELETE FROM esb_request WHERE ID = '1'")) //to maintain non duplicay temporarily
 	{
 		printf("Failed to execute query. Error: %s\n", mysql_error(conn));
 		
@@ -94,12 +116,16 @@ void sqlcon() {
 	 mysql_free_result(res);
 	 
 	 /*sql query to insert in table*/
+	char *status="availble";
+	char query[5000];
+     printf("INSERT INTO esb_request(sender_id, dest_id, message_type, reference_id, message_id, received_on,status) VALUES (%s,%s,%s,%s,%s,%s,%s)\n\n", bmd->bmd_envelope->Sender ,bmd->bmd_envelope->Destination,bmd->bmd_envelope->MessageType,bmd->bmd_envelope->ReferenceID,bmd->bmd_envelope->MessageID,bmd->bmd_envelope->CreationDateTime,status);
+     
+	 sprintf(query, "INSERT INTO esb_request(id, sender_id, dest_id, message_type, reference_id, message_id, received_on, status) VALUES (%d, '%s','%s', '%s','%s', '%s','%s','%s')", ID, bmd->bmd_envelope->Sender, bmd->bmd_envelope->Destination, bmd->bmd_envelope->MessageType, bmd->bmd_envelope->ReferenceID, bmd->bmd_envelope->MessageID, received_on, status);
 	 
-	 sprintf(query, "INSERT INTO esb_request(id, sender_id, dest_id, message_type, reference_id, message_id, received_on, data_location, status, status_details) VALUES (%d, '%s','%s', '%s','%s', '%s','%s', '%s','%s', '%s')",Message_ID, sender_id, dest_id, Message_Type, reference_id, message_id, received_on, data_location, status, status_details);
 	 
 	if (mysql_query(conn, query))
 	{
-		printf("Failed to execute query. Error: %s\n", mysql_error(conn));
+		printf("Failed to execute query.Error: %s\n", mysql_error(conn));
 		
 	}
 	 
@@ -147,7 +173,7 @@ void sqlcon() {
 	 int i = 0;
 	 
 	 printf("Entries in the table esb_request:\n");
-	 while(row = mysql_fetch_row(res))
+	 while((row = mysql_fetch_row(res)))
 	 {
 	   for (i = 0; i < columns; i++)
 	   {
