@@ -41,6 +41,7 @@
 #include <sys/stat.h>
 #include <limits.h>
 #include <stdio.h>
+#include<sqltest.c>
 
 //#define PATH_MAX 500
 
@@ -77,6 +78,8 @@ int esb_endpoint(struct http_request *req)
 		if (esb_status >= 0)
 		{
 			//TODO: Take suitable action
+			printf("\nProcessing SQL Queries...\n");
+			sqlcon();
 			return (KORE_RESULT_OK);
 		}
 		else
