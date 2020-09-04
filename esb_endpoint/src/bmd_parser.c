@@ -22,6 +22,7 @@ unsigned char Signature[] = "Signature";
 unsigned char UserProperties[] = "UserProperties";
 unsigned char ReferenceID[] = "ReferenceID";
 
+
 //return 1 if string is a valid GUID
 int check_if_string_is_guid(const xmlChar *value)
 {
@@ -148,6 +149,7 @@ process_nodes(xmlTextReaderPtr reader, envelope *bmd_envelope, payload *bmd_payl
     {
         value = get_node_data(reader);
         bmd_payload->data = xmlStrdup(value);
+        
     }
 }
 

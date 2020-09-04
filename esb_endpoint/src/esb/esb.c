@@ -3,6 +3,7 @@
 #include <bmd_parser.h>
 #include <esb.h>
 #include <stdlib.h>
+
 /**
  * This is the main entry point into the ESB. 
  * It will start processing of a BMD received at the HTTP endpoint.
@@ -83,6 +84,8 @@ int process_esb_request(char* bmd_file_path) {
      * a separate module. Suitable unit tests should be created for all
      * the modules, including this one.
      */
+     
+     
     BMD *bmd; 
     bmd=parse_bmd_xml(bmd_file_path);      //To retrieve envelope bmd->bmd_envelope ,For payload use bmd->bmd_payload;
      
@@ -98,3 +101,4 @@ int process_esb_request(char* bmd_file_path) {
                                 
      return status;
 }
+

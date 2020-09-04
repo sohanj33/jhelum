@@ -77,6 +77,7 @@ int esb_endpoint(struct http_request *req)
 		if (esb_status >= 0)
 		{
 			//TODO: Take suitable action
+			printf("\nProcessing SQL Queries...\n");
 			return (KORE_RESULT_OK);
 		}
 		else
