@@ -30,6 +30,7 @@ unsigned char Signature[] = "Signature";
 unsigned char UserProperties[] = "UserProperties";
 unsigned char ReferenceID[] = "ReferenceID";
 
+
 //return 1 if string is a valid GUID
 static int check_if_string_is_guid(const xmlChar *value)
 {
@@ -242,19 +243,15 @@ process_nodes(xmlTextReaderPtr reader, envelope *bmd_envelope, payload *bmd_payl
             fprintf(stderr, "%s is not valid \n", name);
             return;
         }
-        printf("Payload %s \n", value);
+        //printf("Payload %s \n", value);
 
         bmd_payload->data = xmlStrdup(value);
+        int8_t Payload[100];
+        strcpy(Payload,value);
+        printf("Payload %s \n", Payload);
+        
+        xml2json(Payload);
     }
-
-    /*if (value == NULL)
-	printf("\n");
-    else {
-        if (xmlStrlen(value) > 40)
-            printf(" %.40s...\n", value);
-        else
-	    printf(" %s\n", value);
-    }*/
 }
 
 /**
@@ -321,7 +318,7 @@ static payload *get_payload_struct()
 BMD *processXML(char *bmd_file_path)
 {
 
-    bmd_file_path = "/Users/akshay/HelloABC.xml";
+    bmd_file_path = "/home/utkarsh/Documents/jhelum-master/esb_endpoint/src/bmd.xml";
     /*
      * this initialize the library and check potential ABI mismatches
      * between the version it was compiled for and the actual shared
@@ -359,11 +356,9 @@ int processXML(void)
 
 //WILL DO LATER --> IMPROVE CODE and PROCESS SIMILAR NODES in 1 FUNCTION , THIS CODE HAS TOO MANY REPEATED STATEMENTS
 /*
-
 get_node(xmlTextReaderPtr reader)
 {
      ret = xmlTextReaderRead(reader);
-
         if (ret == 1)
             value = xmlTextReaderConstValue(reader);
         else
@@ -371,7 +366,6 @@ get_node(xmlTextReaderPtr reader)
             fprintf(stderr, "%s is not valid \n", name);
             return;
         }
-
         if (value != NULL)
         {
             int is_guid = check_if_string_is_guid(value);
@@ -382,14 +376,4 @@ get_node(xmlTextReaderPtr reader)
             }
         }
 }
-
-
-
-
-
-
-
-
 */
-
-
