@@ -1,15 +1,7 @@
 /**
- * section: xmlReader
- * synopsis: Parse and validate an XML file with an xmlReader
- * purpose: Demonstrate the use of xmlReaderForFile() to parse an XML file
- *          validating the content in the process and activating options
- *          like entities substitution, and DTD attributes defaulting.
- *          (Note that the XMLReader functions require libxml2 version later
- *          than 2.6.)
- * usage: reader2 <valid_xml_filename>
- * test: reader2 test2.xml > reader1.tmp && diff reader1.tmp $(srcdir)/reader1.res
- * author: Daniel Veillard
- * copy: see Copyright for the status of this software.
+ * section: BMD XML parsing 
+ * synopsis: Parse and validate a BMD XML file with an xmlReader
+ * purpose: To extract envelope and payload data from the given BMD XML file.
  */
 
 #include <stdio.h>
@@ -31,7 +23,7 @@ unsigned char UserProperties[] = "UserProperties";
 unsigned char ReferenceID[] = "ReferenceID";
 
 //return 1 if string is a valid GUID
-static int check_if_string_is_guid(const xmlChar *value)
+int check_if_string_is_guid(const xmlChar *value)
 {
     int len = xmlStrlen(value);
 
@@ -67,133 +59,71 @@ static int check_if_string_is_guid(const xmlChar *value)
     return 1;
 }
 
+//Returns text data present between Start Tag and End Tag of XML.
+static const xmlChar *get_node_data(xmlTextReaderPtr reader)
+{
+    const xmlChar *name, *value;
+    name = xmlTextReaderConstName(reader);
+    int ret = xmlTextReaderRead(reader);
+
+    if (ret == 1)
+        value = xmlTextReaderConstValue(reader);
+    else
+    {
+        fprintf(stderr, "%s is not valid \n", name);
+        return NULL;
+    }
+    return value;
+}
+
+/*
+ Stores text in respective bmd field.
+ */
 static void
 process_nodes(xmlTextReaderPtr reader, envelope *bmd_envelope, payload *bmd_payload)
 {
+
+    //If node is not of the type <Start> then return
     if (xmlTextReaderNodeType(reader) != START_TAG)
         return;
 
     const xmlChar *name, *value;
 
     name = xmlTextReaderConstName(reader);
-
     value = xmlTextReaderConstValue(reader);
 
     int ret = 0;
-    // printf("%d %d %s %d %d\n",
-    //        xmlTextReaderDepth(reader),
-    //        xmlTextReaderNodeType(reader),
-    //        name,
-    //        xmlTextReaderIsEmptyElement(reader),
-    //        xmlTextReaderHasValue(reader));
-
     if (xmlStrcmp(MessageID, name) == 0)
     {
-
-        ret = xmlTextReaderRead(reader);
-
-        if (ret == 1)
-            value = xmlTextReaderConstValue(reader);
-        else
-        {
-            fprintf(stderr, "%s is not valid \n", name);
-            return;
-        }
-
-        if (value != NULL)
-        {
-            int is_guid = check_if_string_is_guid(value);
-            if (is_guid == 0)
-            {
-                fprintf(stderr, "%s is not a valid GUID \n", name);
-                return;
-            }
-        }
-
+        value = get_node_data(reader);
         bmd_envelope->MessageID = xmlStrdup(value);
-        printf("Envelope Message ID is valid value: %s \n", bmd_envelope->MessageID);
+        printf("Message ID: %s \n", bmd_envelope->MessageID);
     }
 
     if (xmlStrcmp(MessageType, name) == 0)
     {
-
-        ret = xmlTextReaderRead(reader);
-        if (ret == 1)
-            value = xmlTextReaderConstValue(reader);
-        else
-        {
-            fprintf(stderr, "%s is not valid \n", name);
-            return;
-        }
-
+        value = get_node_data(reader);
         bmd_envelope->MessageType = xmlStrdup(value);
         printf("Message Type %s \n", bmd_envelope->MessageType);
     }
 
     if (xmlStrcmp(Sender, name) == 0)
     {
-
-        ret = xmlTextReaderRead(reader);
-        if (ret == 1)
-            value = xmlTextReaderConstValue(reader);
-        else
-        {
-            fprintf(stderr, "%s is not valid \n", name);
-            return;
-        }
-
-        if (value != NULL)
-        {
-            int is_guid = check_if_string_is_guid(value);
-            if (is_guid == 0)
-            {
-                fprintf(stderr, "%s is not a valid GUID \n", name);
-                return;
-            }
-        }
-
+        value = get_node_data(reader);
         bmd_envelope->Sender = xmlStrdup(value);
-        printf("Envelope Sender is valid  %s \n", bmd_envelope->Sender);
+        printf("Sender %s \n", bmd_envelope->Sender);
     }
 
     if (xmlStrcmp(Destination, name) == 0)
     {
-
-        ret = xmlTextReaderRead(reader);
-        if (ret == 1)
-            value = xmlTextReaderConstValue(reader);
-        else
-        {
-            fprintf(stderr, "%s is not valid \n", name);
-            return;
-        }
-
-        if (value != NULL)
-        {
-            int is_guid = check_if_string_is_guid(value);
-            if (is_guid == 0)
-            {
-                fprintf(stderr, "%s is not a valid GUID \n", name);
-                return;
-            }
-        }
-
+        value = get_node_data(reader);
         bmd_envelope->Destination = xmlStrdup(value);
-        printf("Envelope Destination is valid %s \n", bmd_envelope->Destination);
+        printf("Destination %s \n", bmd_envelope->Destination);
     }
 
     if (xmlStrcmp(Signature, name) == 0)
     {
-        ret = xmlTextReaderRead(reader);
-        if (ret == 1)
-            value = xmlTextReaderConstValue(reader);
-        else
-        {
-            fprintf(stderr, "%s is not valid \n", name);
-            return;
-        }
-        printf("Signature is %s \n", value);
-
+        value = get_node_data(reader);
         bmd_envelope->Signature = xmlStrdup(value);
     }
 
@@ -204,65 +134,24 @@ process_nodes(xmlTextReaderPtr reader, envelope *bmd_envelope, payload *bmd_payl
 
     if (xmlStrcmp(ReferenceID, name) == 0)
     {
-        ret = xmlTextReaderRead(reader);
-        if (ret == 1)
-            value = xmlTextReaderConstValue(reader);
-        else
-        {
-            fprintf(stderr, "%s is not valid \n", name);
-            return;
-        }
-        printf("ReferenceId %s \n", value);
-
+        value = get_node_data(reader);
         bmd_envelope->ReferenceID = xmlStrdup(value);
     }
 
     if (xmlStrcmp(CreationDateTime, name) == 0)
     {
-        ret = xmlTextReaderRead(reader);
-        if (ret == 1)
-            value = xmlTextReaderConstValue(reader);
-        else
-        {
-            fprintf(stderr, "%s is not valid \n", name);
-            return;
-        }
-        printf("CreationDateTime %s \n", value);
-
+        value = get_node_data(reader);
         bmd_envelope->CreationDateTime = xmlStrdup(value);
     }
 
     if (xmlStrcmp(Payload, name) == 0)
     {
-        ret = xmlTextReaderRead(reader);
-        if (ret == 1)
-            value = xmlTextReaderConstValue(reader);
-        else
-        {
-            fprintf(stderr, "%s is not valid \n", name);
-            return;
-        }
-        printf("Payload %s \n", value);
-
+        value = get_node_data(reader);
         bmd_payload->data = xmlStrdup(value);
     }
-
-    /*if (value == NULL)
-	printf("\n");
-    else {
-        if (xmlStrlen(value) > 40)
-            printf(" %.40s...\n", value);
-        else
-	    printf(" %s\n", value);
-    }*/
 }
 
-/**
- * streamFile:
- * @filename: the file name to parse
- *
- * Parse, validate and print information about an XML file.
- */
+//Parses the entire XML
 static void
 streamFile(const char *bmd_file_path, envelope *bmd_envelope, payload *bmd_payload)
 {
@@ -288,12 +177,14 @@ streamFile(const char *bmd_file_path, envelope *bmd_envelope, payload *bmd_paylo
         }
         /*
 	 * Once the document has been fully parsed check the validation results
-	 */
+	 
 
-        // if (xmlTextReaderIsValid(reader) != 1)
-        // {
-        //     fprintf(stderr, "Document %s does not validate\n", bmd_file_path);
-        // }
+         if (xmlTextReaderIsValid(reader) != 1)
+         {
+             fprintf(stderr, "Document %s does not validate\n", bmd_file_path);
+         }
+
+        */
         xmlFreeTextReader(reader);
         if (ret != 0)
         {
@@ -318,10 +209,8 @@ static payload *get_payload_struct()
     return bmd_payload;
 }
 
-BMD *processXML(char *bmd_file_path)
+BMD *process_xml(char *bmd_file_path)
 {
-
-    bmd_file_path = "/Users/akshay/HelloABC.xml";
     /*
      * this initialize the library and check potential ABI mismatches
      * between the version it was compiled for and the actual shared
@@ -336,8 +225,6 @@ BMD *processXML(char *bmd_file_path)
 
     streamFile(bmd_file_path, bmd->bmd_envelope, bmd->bmd_payload);
 
-    printf(" \n %s \n %s \n %s \n ", bmd->bmd_envelope->MessageID, bmd->bmd_envelope->MessageType, bmd->bmd_envelope->ReferenceID);
-    printf("payload %s\n", bmd->bmd_payload->data);
     /*
      * Cleanup function for the XML library.
      */
@@ -356,40 +243,4 @@ int processXML(void)
     exit(1);
 }
 #endif
-
-//WILL DO LATER --> IMPROVE CODE and PROCESS SIMILAR NODES in 1 FUNCTION , THIS CODE HAS TOO MANY REPEATED STATEMENTS
-/*
-
-get_node(xmlTextReaderPtr reader)
-{
-     ret = xmlTextReaderRead(reader);
-
-        if (ret == 1)
-            value = xmlTextReaderConstValue(reader);
-        else
-        {
-            fprintf(stderr, "%s is not valid \n", name);
-            return;
-        }
-
-        if (value != NULL)
-        {
-            int is_guid = check_if_string_is_guid(value);
-            if (is_guid == 0)
-            {
-                fprintf(stderr, "%s is not a valid GUID \n", name);
-                return;
-            }
-        }
-}
-
-
-
-
-
-
-
-
-*/
-
 

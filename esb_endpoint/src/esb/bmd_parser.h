@@ -33,6 +33,6 @@ typedef struct
 
 
 
-BMD *processXML(char *);
+BMD *process_xml(char *);
 envelope *extract_envelop(char *bmd_xml);
 payload *extract_payload(char *bmd_xml);
