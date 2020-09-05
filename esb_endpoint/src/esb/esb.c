@@ -52,12 +52,19 @@ static int is_bmd_valid(BMD *bmd)
 
      /*If for given Sender , Destination and Message Type there is no
        Active route Present then the BMD is invalid.
-       For a selected Route there must be records present in transport_config and transform_config tables*/
-           if(check_if_route_exists(bmd->bmd_envelope->Sender,
-                                    bmd->bmd_envelope->Destination,
-                                    bmd->bmd_envelope->MessageType) !=1)
+       For a selected Route there must be records present in transport_config and transform_config tables
+     */
+           int route_id=select_active_route( bmd->bmd_envelope->Sender,
+                                             bmd->bmd_envelope->Destination,
+                                             bmd->bmd_envelope->MessageType);
+           if( route_id>0)
            {
-                  return 0;
+            if(select_transport_config(route_id) >0 && select_transform_config(route_id) >0)
+             valid=1;
+            else
+             valid=0;
+                      
+                      
            }
 
          return valid;
