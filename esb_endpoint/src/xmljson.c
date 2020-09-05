@@ -1,8 +1,9 @@
 #include<stdio.h>
+#include <stdlib.h>
 
 void xml2json(char Pay[])
 {
-	char filename[] = "/home/utkarsh/Documents/jhelum-master/esb_endpoint/Payload.json";
+	char filename[] = "/home/utkarsh/Documents/jhelum-master/esb_endpoint/bmd_files/Payload.json";
         FILE *file;
     	file = fopen(filename,"w");
     	
