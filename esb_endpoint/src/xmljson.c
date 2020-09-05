@@ -39,5 +39,5 @@ void xml2json(char Pay[])
    	 fclose(fp); 
         
     	/* returns json filename */
-    	return strdup(filename);
+    	//return strdup(filename);
 }

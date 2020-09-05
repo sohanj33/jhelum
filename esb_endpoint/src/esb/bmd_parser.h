@@ -34,5 +34,6 @@ typedef struct
 
 
 BMD *process_xml(char *);
+int check_if_string_is_guid(const unsigned char *value);
 envelope *extract_envelop(char *bmd_xml);
 payload *extract_payload(char *bmd_xml);

@@ -93,7 +93,7 @@ process_nodes(xmlTextReaderPtr reader, envelope *bmd_envelope, payload *bmd_payl
     name = xmlTextReaderConstName(reader);
     value = xmlTextReaderConstValue(reader);
 
-    int ret = 0;
+    
     if (xmlStrcmp(MessageID, name) == 0)
     {
         value = get_node_data(reader);
