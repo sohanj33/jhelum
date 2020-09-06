@@ -32,7 +32,7 @@ typedef struct
 }BMD;
 
 
-
+BMD *parse_bmd_xml(char *);
 BMD *process_xml(char *);
 int check_if_string_is_guid(const unsigned char *value);
 envelope *extract_envelop(char *bmd_xml);

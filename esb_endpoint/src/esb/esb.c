@@ -1,7 +1,6 @@
 #include <stdio.h>
-#include "email.h"
 #include "bmd_parser.h"
-#include <esb.h>
+#include "esb.h"
 #include <stdlib.h>
 /**
  * This is the main entry point into the ESB. 
@@ -12,7 +11,7 @@
    *Parses the BMD to extract envelope and payload.
    *It returns a pointer to the struct BMD. 
 */
-static BMD *parse_bmd_xml(char *bmd_file_path)
+BMD *parse_bmd_xml(char *bmd_file_path)
 {
   BMD *bmd;
   bmd = process_xml(bmd_file_path);

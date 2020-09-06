@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type='text/xsl'?> 
+<BMD>
+<Envelop>
+<MessageID>This%is%second%test%case</MessageID>
+<MessageType>C!R!</MessageType>
+<Sender>Sender</Sender>
+<Destination>Destination</Destination>
+<CreationDateTime>2020-08-12T05:18:00+0000</CreationDateTime>
+<Signature>5tggt</Signature>
+<ReferenceID>RefID</ReferenceID>
+<UserProperties>
+<key1>K_12</key1>
+<key2>K_22</key2>
+</UserProperties>
+</Envelop>
+<Payload>001-01-12341</Payload>
+</BMD>

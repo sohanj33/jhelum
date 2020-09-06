@@ -6,7 +6,7 @@
 
 #include <stdio.h>
 #include <libxml/xmlreader.h>
-#include <bmd_parser.h>
+#include "bmd_parser.h"
 #include <ctype.h>
 #include <string.h>
 #ifdef LIBXML_READER_ENABLED
