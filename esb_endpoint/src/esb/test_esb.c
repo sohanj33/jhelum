@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "bmd_parser.h"
+#include "../xmljson.c"
 /**
  * If the name of a test function is "test_abc" then you should
  * define the setup and teardown functions by the names:
@@ -102,6 +103,36 @@ test_parse_bmd_xml(const MunitParameter params[], void *fixture)
     return MUNIT_OK;
 }
 
+/* Test setup function for Payload.Json Filesize */
+static void *
+test_filesize_setup(const MunitParameter params[], void *user_data)
+{
+  char file[] = "Payload.json";
+  int *p=malloc(sizeof(int *));
+  *p = get_filesize(file);
+  return p;
+  
+}
+
+/* Teardown */
+static void
+test_filesize_tear_down(void *fixture)
+{
+
+  free(fixture);
+}
+
+/* Test function for Payload.Json Filesize */
+static MunitResult
+test_filesize(const MunitParameter params[], void *fixture)
+{
+  int *filesize = (int *)fixture;
+  
+  munit_assert_int(filesize, <, 5000000);
+
+  return MUNIT_OK;
+}
+
 /* Define the setup and the test for test2 */
 static void *
 test2_parse_bmd_xml_setup(const MunitParameter params[], void *user_data)
@@ -151,12 +182,21 @@ MunitTest esb_tests[] = {
         test2_parse_bmd_xml,                  /* test function */
         test2_parse_bmd_xml_setup,            /* setup function for the test */
         test2_parse_bmd_xml_tear_down,        /* tear_down */
-        MUNIT_TEST_OPTION_NONE, /* options */
-        NULL                    /* parameters */
+         MUNIT_TEST_OPTION_NONE,
+         NULL
     },
-    /* Mark the end of the array with an entry where the test
-   * function is NULL */
-    {NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}};
+    {
+    "/test_json_filesize",            /* name */
+      test_filesize,                 /*test function*/
+      test_filesize_setup,          /*setup function for the test*/
+      test_filesize_tear_down,      /*tear_down*/
+      MUNIT_TEST_OPTION_NONE,       /*options*/
+      NULL                         /*parameters*/
+    },
+    {NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}};  /* Mark the end of the array with an entry where 
+                                                                  the test * function is NULL */
+  
+   
 
 /* Arrange the test cases into a test suite. */
 static const MunitSuite suite = {

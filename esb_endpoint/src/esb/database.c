@@ -15,6 +15,29 @@ int insert_in_esb_request(BMD *bmd)
 	MYSQL *conn;
 	MYSQL_RES *res;
 	MYSQL_ROW row;
+	
+	int8_t received_temp[100]; //= "2020-08-12 05:18:00+0000";
+  	int8_t received_on[100];
+  	strcpy(received_temp,bmd->bmd_envelope->CreationDateTime);
+  	
+  	/*Changing DateTime format*/
+  	int n = strlen(received_temp);
+  	int j=0;
+  	for(int i=0;i<=n; i++)
+  	{
+  		received_on[j] = received_temp[i];
+  		if(received_on[i]=='T')		//test for character
+		{
+			received_on[i] = ' '; // change T to space
+		}
+		if(i==n-3)
+		{
+			char ch = ':';
+		  	strncat(received_on, &ch, 1); 
+		  	j++;			
+		}
+		j++;
+	}
 
 	conn = mysql_init(NULL);
 
@@ -37,7 +60,7 @@ int insert_in_esb_request(BMD *bmd)
 			bmd->bmd_envelope->MessageType,
 			bmd->bmd_envelope->ReferenceID,
 			bmd->bmd_envelope->MessageID,
-			bmd->bmd_envelope->CreationDateTime
+			received_on
 			,status);
 
 	printf("\n\n%s\n\n", query);
