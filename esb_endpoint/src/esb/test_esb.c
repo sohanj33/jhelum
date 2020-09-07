@@ -167,6 +167,37 @@ test2_parse_bmd_xml(const MunitParameter params[], void *fixture)
     return MUNIT_OK;
 }
 
+/* Test setup function for JSON filecontent */
+static void *
+Json_filecontents_setup(const MunitParameter params[], void *user_data)
+{
+  char *file_created = xml2json("001-01-1234");
+  char *json_data = get_filecontents(file_created);
+  return strdup(json_data);
+  
+}
+
+/* Teardown */
+static void
+Json_filecontents_tear_down(void *fixture)
+{
+
+  free(fixture);
+}
+
+/* Test function for JSON filecontent */
+static MunitResult
+test_Json_filecontents(const MunitParameter params[], void *fixture)
+{
+  char *json_data = (char *)fixture;
+
+  char *test_data = get_filecontents("Payload.json");
+
+  munit_assert_string_equal(json_data, test_data);
+  return MUNIT_OK;
+}
+
+
 /* Put all unit tests here. */
 MunitTest esb_tests[] = {
     {
@@ -192,6 +223,14 @@ MunitTest esb_tests[] = {
       test_filesize_tear_down,      /*tear_down*/
       MUNIT_TEST_OPTION_NONE,       /*options*/
       NULL                         /*parameters*/
+    },
+    {
+        "/filesize_test",                  /* name */
+        test_Json_filecontents,            /* test function */
+        Json_filecontents_setup,           /* setup function for the test */
+        Json_filecontents_tear_down,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
     },
     {NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}};  /* Mark the end of the array with an entry where 
                                                                   the test * function is NULL */
