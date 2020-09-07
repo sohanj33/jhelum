@@ -171,7 +171,7 @@ test2_parse_bmd_xml(const MunitParameter params[], void *fixture)
 static void *
 Json_filecontents_setup(const MunitParameter params[], void *user_data)
 {
-  char *file_created = xml2json("001-01-1234");
+  char *file_created = xmltojson("001-01-1234");
   char *json_data = get_filecontents(file_created);
   return strdup(json_data);
   
