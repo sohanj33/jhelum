@@ -3,7 +3,7 @@
 
 void xml2json(char Pay[])
 {
-	char filename[] = "/home/utkarsh/Documents/jhelum-master/esb_endpoint/bmd_files/Payload.json";
+	char filename[] = "Payload.json";
         FILE *file;
     	file = fopen(filename,"w");
     	
@@ -20,8 +20,14 @@ void xml2json(char Pay[])
     
    	 /* Closes file */
     	fclose(file);
-    	
-    	/*File size validation*/
+       
+    	/* returns json filename */
+    	//return strdup(filename);
+}
+
+int get_filesize(char filename[])
+{
+	/*File size validation*/
     	 FILE *fp;
    	 int size = 0;
  
@@ -36,9 +42,9 @@ void xml2json(char Pay[])
    	/*Check if Filesize is larger than 5MB*/
    	if(size>5000000)
    		printf("\nFile size larger than 5MB not allowed!\n");
-   	  
+   	 
+   	 /*close the file*/ 
    	 fclose(fp); 
-        
-    	/* returns json filename */
-    	//return strdup(filename);
-}
+   	 /*return filesize*/
+   	 return size;
+ }
