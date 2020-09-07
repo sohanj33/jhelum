@@ -48,3 +48,47 @@ int get_filesize(char filename[])
    	 /*return filesize*/
    	 return size;
  }
+
+char* get_filecontents(char filename[])
+{
+	long f_size;
+	char *str_data;
+	size_t file_size, result;
+	FILE *fp = fopen(filename, "r");
+	fseek(fp, 0, SEEK_END);
+	
+	/* Reads the size of the file */
+	f_size = ftell(fp);
+	fseek(fp, 0, SEEK_SET);
+	file_size = sizeof(char) * f_size;
+	str_data = malloc(file_size);
+	
+	/* fread returns number of items actually read. */
+	result = fread(str_data, 1, f_size, fp);
+	return strdup(str_data);
+
+}
+
+char* xmltojson(char Pay[])
+{
+	char filename[] = "Payload.json";
+        FILE *file;
+    	file = fopen(filename,"w");
+    	
+    	if(file == NULL) 
+    	{
+        	printf("file opening filed");
+        	exit(0);
+    	}
+    	
+    	/* Writes into json file */
+    	fprintf(file,"{\n \"Payload\":\"%s\"\n}",Pay);
+    	
+    	printf("\nPayload json File created\n");
+    
+   	 /* Closes file */
+    	fclose(file);
+       
+    	/* returns json filename */
+    	return strdup(filename);
+}
