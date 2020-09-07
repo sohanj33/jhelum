@@ -149,6 +149,10 @@ process_nodes(xmlTextReaderPtr reader, envelope *bmd_envelope, payload *bmd_payl
     {
         value = get_node_data(reader);
         bmd_payload->data = xmlStrdup(value);
+	int8_t Payload[100];                 
+        strcpy(Payload,value);
+        
+        xml2json(Payload); //Creating JSON file
         
     }
 }
