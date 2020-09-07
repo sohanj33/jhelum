@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "bmd_parser.h"
+#include "../xmljson.c"
 /**
  * If the name of a test function is "test_abc" then you should
  * define the setup and teardown functions by the names:
@@ -104,6 +105,36 @@ test_parse_bmd_xml(const MunitParameter params[], void *fixture)
     return MUNIT_OK;
 }
 
+/* Test setup function for Payload.Json Filesize */
+static void *
+filesize_setup(const MunitParameter params[], void *user_data)
+{
+  char file[] = "Payload.json";
+  int *p=malloc(sizeof(int *));
+  *p = get_filesize(file);
+  return p;
+  
+}
+
+/* Teardown */
+static void
+filesize_tear_down(void *fixture)
+{
+
+  free(fixture);
+}
+
+/* Test function for Payload.Json Filesize */
+static MunitResult
+test_filesize(const MunitParameter params[], void *fixture)
+{
+  int *filesize = (int *)fixture;
+  
+  munit_assert_int(filesize, <, 5000000);
+
+  return MUNIT_OK;
+}
+
 /* Define the setup and the test for test2 */
 static void *
 test2_setup(const MunitParameter params[], void *user_data)
@@ -135,6 +166,13 @@ MunitTest esb_tests[] = {
         MUNIT_TEST_OPTION_NONE,       /* options */
         NULL                          /* parameters */
     },
+    {
+    "/test_json_filesize",            /* name */
+    bmd_tests,                        /* tests */
+    NULL,                             /* suites */
+    1,                                /* iterations */
+    MUNIT_SUITE_OPTION_NONE           /* options */
+    }
     {
         "/my-test-2",           /* name */
         test2,                  /* test function */
