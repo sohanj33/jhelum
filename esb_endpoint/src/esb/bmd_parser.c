@@ -9,6 +9,7 @@
 #include "bmd_parser.h"
 #include <ctype.h>
 #include <string.h>
+#include "../xmljson.c"
 #ifdef LIBXML_READER_ENABLED
 
 unsigned char ENVELOPE[] = "Envelop";
