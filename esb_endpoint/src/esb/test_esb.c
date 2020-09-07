@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "bmd_parser.h"
-#include "../xmljson.c"
 /**
  * If the name of a test function is "test_abc" then you should
  * define the setup and teardown functions by the names:

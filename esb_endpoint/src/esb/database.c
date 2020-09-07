@@ -100,15 +100,15 @@ int select_active_route(const unsigned char *Sender, const unsigned char *Destin
 
 	/* Execute SQL query to fetch all table names.*/
 	sprintf(query, SELECT_ACTIVE_ROUTE, Sender, Destination, MessageType);
+	
 	if (mysql_query(conn, query))
 	{
 		printf("Failed to execute quesry. Error: %s\n", mysql_error(conn));
 	}
 
 	res = mysql_use_result(conn);
-	if (res->row_count == 1)
+	if ((row = mysql_fetch_row(res)) != NULL)
 	{
-		while ((row = mysql_fetch_row(res)) != NULL)
 			success = atoi(row[0]);
 	}
 	else
@@ -116,12 +116,6 @@ int select_active_route(const unsigned char *Sender, const unsigned char *Destin
 		success = -1;
 	}
 
-	/* Output table name */
-	// printf("MySQL Tables in mydb database:\n");
-	//while ((row = mysql_fetch_row(res)) != NULL)
-	//printf("%s \n", row[0]);
-
-	/* free results */
 	mysql_free_result(res);
 	return success;
 }
@@ -145,13 +139,15 @@ int select_transport_config(int route_id)
 
 	/* Execute SQL query to fetch all table names.*/
 	sprintf(query, SELECT_TRANSPORT_CONFIG,route_id);
+	printf("%s",query);
 	if (mysql_query(conn, query))
 	{
-		printf("Failed to execute quesry. Error: %s\n", mysql_error(conn));
+		printf("Failed to execute query. Error: %s\n", mysql_error(conn));
 	}
-
+    
 	res = mysql_use_result(conn);
-	if (res->row_count >= 1)
+
+	if (res->field_count >= 1)
 	{
 		success=1;
 	}
@@ -191,6 +187,7 @@ int select_transform_config(int route_id)
 	}
 
 	res = mysql_use_result(conn);
+	printf("%s\n %d\n ",query,res->row_count);
 	if (res->row_count >= 1)
 	{
 		success=1;

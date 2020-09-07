@@ -1,7 +1,7 @@
 #define INSERT_IN_ESB_REQUEST  "INSERT INTO esb_request(sender_id,dest_id,message_type,reference_id,message_id,received_on,status) VALUES ('%s','%s','%s','%s','%s','%s','%s')"
-#define SELECT_ACTIVE_ROUTE "SELECT route_id FROM routes WHERE sender = '%s' AND destination = '%s' AND message_type= '%s'  and is_active=1"
-#define SELECT_TRANSPORT_CONFIG "SELECT * FROM transport_config WHERE route_id='%d"
-#define SELECT_TRANSFORM_CONFIG "SELECT * FROM transform_config WHERE route_id='%d"
+#define SELECT_ACTIVE_ROUTE "SELECT route_id FROM routes WHERE sender = '%s' AND destination = '%s' AND message_type= '%s'  AND is_active=b'1'"
+#define SELECT_TRANSPORT_CONFIG "SELECT * FROM transport_config WHERE route_id='%d'"
+#define SELECT_TRANSFORM_CONFIG "SELECT * FROM transform_config WHERE route_id='%d'"
 
 
 char *server = "localhost";
