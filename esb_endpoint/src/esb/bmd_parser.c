@@ -98,28 +98,28 @@ process_nodes(xmlTextReaderPtr reader, envelope *bmd_envelope, payload *bmd_payl
     {
         value = get_node_data(reader);
         bmd_envelope->MessageID = xmlStrdup(value);
-        printf("Message ID: %s \n", bmd_envelope->MessageID);
+        //printf("Message ID: %s \n", bmd_envelope->MessageID);
     }
 
     if (xmlStrcmp(MessageType, name) == 0)
     {
         value = get_node_data(reader);
         bmd_envelope->MessageType = xmlStrdup(value);
-        printf("Message Type %s \n", bmd_envelope->MessageType);
+        //printf("Message Type %s \n", bmd_envelope->MessageType);
     }
 
     if (xmlStrcmp(Sender, name) == 0)
     {
         value = get_node_data(reader);
         bmd_envelope->Sender = xmlStrdup(value);
-        printf("Sender %s \n", bmd_envelope->Sender);
+        //printf("Sender %s \n", bmd_envelope->Sender);
     }
 
     if (xmlStrcmp(Destination, name) == 0)
     {
         value = get_node_data(reader);
         bmd_envelope->Destination = xmlStrdup(value);
-        printf("Destination %s \n", bmd_envelope->Destination);
+        //printf("Destination %s \n", bmd_envelope->Destination);
     }
 
     if (xmlStrcmp(Signature, name) == 0)

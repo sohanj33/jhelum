@@ -24,7 +24,6 @@ test_parse_bmd_xml_setup(const MunitParameter params[], void *user_data)
      * has to be cleaned up in corresponding tear down function,
      * which in this case is test1_tear_down.
      */
-    printf("Hello Tester setup\n");
     DIR *d;
     struct dirent *dir;
     d = opendir("./Test_files");
@@ -77,7 +76,6 @@ test_parse_bmd_xml(const MunitParameter params[], void *fixture)
      * string. You will need to recompile and re-run the tests
      * to see the effect of any changes in data in this example.
      */
-    printf("\nHello Tester\n");
     int i = 0;
     while (str[i] != NULL)
     {
@@ -106,22 +104,35 @@ test_parse_bmd_xml(const MunitParameter params[], void *fixture)
 
 /* Define the setup and the test for test2 */
 static void *
-test2_setup(const MunitParameter params[], void *user_data)
+test2_parse_bmd_xml_setup(const MunitParameter params[], void *user_data)
 {
-    return strdup("TEST-2");
+    char cwd[100];
+    getcwd(cwd, sizeof(cwd));
+    char path[100];
+    sprintf(path, "%s/Test_files/%s", cwd,"HelloABC.xml");
+    
+    return strdup(path);
 }
 
 static void
-test2_tear_down(void *fixture)
+test2_parse_bmd_xml_tear_down(void *fixture)
 {
     free(fixture);
 }
 
 static MunitResult
-test2(const MunitParameter params[], void *fixture)
+test2_parse_bmd_xml(const MunitParameter params[], void *fixture)
 {
     char *str = (char *)fixture;
-    munit_assert_string_equal(str, "TEST-2");
+     BMD *bmd;
+     bmd = parse_bmd_xml(str);
+    munit_assert_string_equal(bmd->bmd_envelope->MessageID,"A9ECAEF2-107A-4452-9553-043B6D25386E");
+    munit_assert_string_equal(bmd->bmd_envelope->Sender,"756E2EAA-1D5B-4BC0-ACC4-4CEB669408DA");
+    munit_assert_string_equal(bmd->bmd_envelope->Destination,"6393F82F-4687-433D-AA23-1966330381FE");
+    munit_assert_string_equal(bmd->bmd_envelope->MessageType,"CreditReport");
+    munit_assert_string_equal(bmd->bmd_envelope->Signature,"63f5f61f7a79301f715433f8f3689390d1f5da4f855169023300491c00b8113c");
+    munit_assert_string_equal(bmd->bmd_envelope->ReferenceID,"INV-PROFILE-889712");
+    munit_assert_string_equal(bmd->bmd_envelope->CreationDateTime,"2020-08-12T05:18:00+0000");
     return MUNIT_OK;
 }
 
@@ -136,10 +147,10 @@ MunitTest esb_tests[] = {
         NULL                          /* parameters */
     },
     {
-        "/my-test-2",           /* name */
-        test2,                  /* test function */
-        test2_setup,            /* setup function for the test */
-        test2_tear_down,        /* tear_down */
+        "/test_bmd_parse_xml",           /* name */
+        test2_parse_bmd_xml,                  /* test function */
+        test2_parse_bmd_xml_setup,            /* setup function for the test */
+        test2_parse_bmd_xml_tear_down,        /* tear_down */
         MUNIT_TEST_OPTION_NONE, /* options */
         NULL                    /* parameters */
     },
