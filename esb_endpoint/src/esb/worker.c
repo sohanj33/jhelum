@@ -2,6 +2,8 @@
 #include <unistd.h>
 #include "esb.h"
 #include "bmd_parser.h"
+#include <mysql.h>
+#include "database.h"
 int fetch_new_request_from_db(BMD *request)
 {
     /** 
@@ -18,6 +20,20 @@ int fetch_new_request_from_db(BMD *request)
 void *poll_database_for_new_requets(void *vargp)
 {
     // Step 1: Open a DB connection
+    MYSQL *conn;
+    conn = mysql_init(NULL);
+    /* Connect to database */
+	if (!mysql_real_connect(conn, server,
+							user, password, database, 0, NULL, 0))
+	{
+		printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
+	}
+    if (mysql_query(conn,"SELECT COUNT(*) FROM esb_request WHERE status='available"))
+	{
+		printf("Failed to execute query.Error: %s\n", mysql_error(conn));
+		
+	}
+
     int i = 0;
     while (i < 99)
     {
