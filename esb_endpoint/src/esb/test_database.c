@@ -31,52 +31,10 @@ test_select_transform_config(const MunitParameter params[], void *fixture)
 }
 
 
-//Put all unit tests here
-MunitTest database_tests[] = {
-    {
-        "/test_select_active_route",        /* name */
-        test_select_active_route,           /* test function */
-        NULL,     /* setup function for the test */
-        NULL, /* tear_down */
-        MUNIT_TEST_OPTION_NONE,       /* options */
-        NULL                          /* parameters */
-    },
-    {
-        "/test_select_transport_config",        /* name */
-        test_select_transport_config,           /* test function */
-        NULL,     /* setup function for the test */
-        NULL, /* tear_down */
-        MUNIT_TEST_OPTION_NONE,       /* options */
-        NULL                          /* parameters */
 
-      
-    },
-    {
-        "/test_select_transform_config",        /* name */
-        test_select_transform_config,           /* test function */
-        NULL,     /* setup function for the test */
-        NULL, /* tear_down */
-        MUNIT_TEST_OPTION_NONE,       /* options */
-        NULL                          /* parameters */
-
-      
-    },
-
-    {
-        NULL,NULL,NULL,NULL,MUNIT_TEST_OPTION_NONE,NULL
-    }};
-
-
-static const MunitSuite suite = {
-    "/test_suite_databse",      /* name */
-    database_tests,              /* tests */
-    NULL,                   /* suites */
-    1,                      /* iterations */
-    MUNIT_SUITE_OPTION_NONE /* options */
-};
 
 /* Run the the test suite */
-int main(int argc, const char *argv[])
-{
-    return munit_suite_main(&suite, NULL, argc, argv);
-}
+// int main(int argc, const char *argv[])
+// {
+//     return munit_suite_main(&suite, NULL, argc, argv);
+// }

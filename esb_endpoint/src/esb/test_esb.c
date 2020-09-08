@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "bmd_parser.h"
+#include "test_database.c"
 /**
  * If the name of a test function is "test_abc" then you should
  * define the setup and teardown functions by the names:
@@ -234,13 +235,60 @@ MunitTest esb_tests[] = {
     {NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}};  /* Mark the end of the array with an entry where 
                                                                   the test * function is NULL */
   
-   
+//Put all unit tests here
+MunitTest database_tests[] = {
+    {
+        "/test_select_active_route",        /* name */
+        test_select_active_route,           /* test function */
+        NULL,     /* setup function for the test */
+        NULL, /* tear_down */
+        MUNIT_TEST_OPTION_NONE,       /* options */
+        NULL                          /* parameters */
+    },
+    {
+        "/test_select_transport_config",        /* name */
+        test_select_transport_config,           /* test function */
+        NULL,     /* setup function for the test */
+        NULL, /* tear_down */
+        MUNIT_TEST_OPTION_NONE,       /* options */
+        NULL                          /* parameters */
+
+      
+    },
+    {
+        "/test_select_transform_config",        /* name */
+        test_select_transform_config,           /* test function */
+        NULL,     /* setup function for the test */
+        NULL, /* tear_down */
+        MUNIT_TEST_OPTION_NONE,       /* options */
+        NULL                          /* parameters */
+
+      
+    },
+
+    {
+        NULL,NULL,NULL,NULL,MUNIT_TEST_OPTION_NONE,NULL
+    }};
+
+
+static const MunitSuite database_suite = {
+    "/test_suite_databse",      /* name */
+    database_tests,              /* tests */
+    NULL,                   /* suites */
+    1,                      /* iterations */
+    MUNIT_SUITE_OPTION_NONE /* options */
+};
+
+
+
+
+
 
 /* Arrange the test cases into a test suite. */
 static const MunitSuite suite = {
     "/test_suite_esb",      /* name */
     esb_tests,              /* tests */
-    NULL,                   /* suites */
+    &database_suite,                   /* suites */
     1,                      /* iterations */
     MUNIT_SUITE_OPTION_NONE /* options */
 };
