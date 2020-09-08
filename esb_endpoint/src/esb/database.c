@@ -52,7 +52,7 @@ int insert_in_esb_request(BMD *bmd)
 
 
 	/*sql query to insert in table*/
-	char *status = "availble";
+	char *status = "available";
 	char query[5000];
 	sprintf(query,INSERT_IN_ESB_REQUEST,
 			bmd->bmd_envelope->Sender,
