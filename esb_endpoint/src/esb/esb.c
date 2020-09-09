@@ -22,7 +22,7 @@ BMD *parse_bmd_xml(char *bmd_file_path)
    *Return 1 if BMD is valid.
  */
 static int is_bmd_valid(BMD *bmd)
-{
+{ 
   int valid = 1; // valid =>1 , -ve for error.
 
   //If any of the envelope values are NULL the BMD is invalid.
