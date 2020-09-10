@@ -232,7 +232,7 @@ int check_new_request(int id)
 	res = mysql_store_result(conn);
         int retval = mysql_num_rows(res);
 	printf("\nrows:\t%d\n",retval);
-	if (retval >=0)
+	if (retval >0)
 	{
 		success=1;
 	}
