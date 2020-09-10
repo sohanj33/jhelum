@@ -5,14 +5,12 @@
 #define SELECT_ACTIVE_ROUTE "SELECT route_id FROM routes WHERE sender = '%s' AND destination = '%s' AND message_type= '%s'  AND is_active=b'1'"
 #define SELECT_TRANSPORT_CONFIG "SELECT * FROM transport_config WHERE route_id='%d'"
 #define SELECT_TRANSFORM_CONFIG "SELECT * FROM transform_config WHERE route_id='%d'"
-#define CHECK_NEW_REQUEST "SELECT * FROM esb_request WHERE status = 'available' LIMIT 1" 
-
-
+#define CHECK_NEW_REQUEST "SELECT * FROM esb_request WHERE status = 'available' AND id='%d' LIMIT 1" 
 
 
 #define server "localhost"
-#define user "root"
-#define password "Akshay12#$"
+#define user "splunk_user"
+#define password "password"
 #define database "esb_db"
 #define port 3306
 
