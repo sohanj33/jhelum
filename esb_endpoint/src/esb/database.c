@@ -64,15 +64,6 @@ int insert_in_esb_request(BMD *bmd)
 			bmd->bmd_envelope->MessageID,
 			received_on
 			,status);
-			
-	sprintf(query2, CHECK_IF_PRESENT,
-			bmd->bmd_envelope->Sender,
-			bmd->bmd_envelope->Destination,
-			bmd->bmd_envelope->MessageType,
-			bmd->bmd_envelope->ReferenceID,
-			bmd->bmd_envelope->MessageID,
-			received_on
-			,status);
 
 	printf("\n\n%s\n\n", query1);
 
