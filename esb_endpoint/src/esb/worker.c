@@ -4,14 +4,24 @@
 #include "bmd_parser.h"
 #include <mysql.h>
 #include "database.h"
+
 int fetch_new_request_from_db(BMD *request)
 {
     /** 
      * TODO: query the DB for this, and populate the 
      * request pointer with the requests.
      */
-    printf("Checking for new requests in esb_requests table.\n");
-    return 1; // 1 => OK, -1 => Errors
+	printf("Checking for new requests in esb_requests table.\n");
+	if(check_new_request()>=1)
+	{
+		printf("\nFound a new request\n");
+		return 1; // 1 => OK, -1 => Errors
+	}
+	else
+	{
+		printf("\nno new requests found\n");
+		return 0;
+	}
 }
 
 /**
