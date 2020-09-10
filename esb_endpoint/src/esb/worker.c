@@ -5,14 +5,15 @@
 #include <mysql.h>
 #include "database.h"
 
-int fetch_new_request_from_db(BMD *request)
+
+int fetch_new_request_from_db(int id)
 {
     /** 
      * TODO: query the DB for this, and populate the 
      * request pointer with the requests.
      */
 	printf("Checking for new requests in esb_requests table.\n");
-	if(check_new_request()>=1)
+	if(check_new_request(id)>=1)
 	{
 		printf("\nFound a new request\n");
 		return 1; // 1 => OK, -1 => Errors
@@ -50,25 +51,32 @@ void *poll_database_for_new_requets(void *vargp)
          * are any newly received BMD requets.
          */
         //Execute
-        int count = 0;
-        if (mysql_query(conn, "SELECT COUNT(*) FROM esb_request WHERE status='available'"))
-        {
-            printf("Failed to execute query.Error: %s\n", mysql_error(conn));
-        }
-        res = mysql_use_result(conn);
-        if ((row = mysql_fetch_row(res)) != NULL)
-        {
-            count = atoi(row[0]);
-        }
-        mysql_free_result(res);
+       
+        /*Query to see rows with status = available*/
+        int ID;
+        mysql_query(conn, "SELECT id FROM esb_request WHERE status = 'available' ORDER BY id LIMIT 1");
+        res = mysql_store_result(conn);
+        int columns = mysql_num_fields(res);
+	 
+	 printf("Entries in the table esb_request with status = available :\n");
+	 while((row = mysql_fetch_row(res)))
+	 {
+	   for (int i = 0; i < columns; i++)
+	   {
+	     //printf("%s ", row[i] ? row[i] : "NULL");
+	     ID = atoi(row[i]);
+	   }
+	   printf("\n");
+	 }
+ 		
+	mysql_free_result(res);
+	
 
-        if (count > 0)
-        {
-            BMD req;
+            BMD *req;
             /**
          * Step 3:
          */
-            if (fetch_new_request_from_db(&req))
+            if (fetch_new_request_from_db(ID))
             {
                 /**
               * Found a new request, so we will now process it.
@@ -83,9 +91,9 @@ void *poll_database_for_new_requets(void *vargp)
               *    of this step.
               * 5. Cleanup
               */
+              
                 printf("Applying transformation and transporting steps.\n");
             }
-        }
         /**
          * Sleep for polling interval duration, say, 5 second.
          * DO NOT hard code it here!
