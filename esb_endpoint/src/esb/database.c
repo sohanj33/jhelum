@@ -42,8 +42,7 @@ int insert_in_esb_request(BMD *bmd)
 	conn = mysql_init(NULL);
 
 	/* Connect to database */
-	if (!mysql_real_connect(conn, server,
-							user, password, database, 0, NULL, 0))
+	if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
 	{
 		printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
 		success=-1;
@@ -53,8 +52,20 @@ int insert_in_esb_request(BMD *bmd)
 
 	/*sql query to insert in table*/
 	char *status = "available";
-	char query[5000];
-	sprintf(query,INSERT_IN_ESB_REQUEST,
+	char query1[5000];
+	char query2[5000];
+	int check = 1; //checking for duplicacy
+	
+	sprintf(query1,INSERT_IN_ESB_REQUEST,
+			bmd->bmd_envelope->Sender,
+			bmd->bmd_envelope->Destination,
+			bmd->bmd_envelope->MessageType,
+			bmd->bmd_envelope->ReferenceID,
+			bmd->bmd_envelope->MessageID,
+			received_on
+			,status);
+			
+	sprintf(query2, CHECK_IF_PRESENT,
 			bmd->bmd_envelope->Sender,
 			bmd->bmd_envelope->Destination,
 			bmd->bmd_envelope->MessageType,
@@ -63,9 +74,9 @@ int insert_in_esb_request(BMD *bmd)
 			received_on
 			,status);
 
-	printf("\n\n%s\n\n", query);
+	printf("\n\n%s\n\n", query1);
 
-	if (mysql_query(conn, query))
+	if (mysql_query(conn, query1))
 	{
 		printf("Failed to execute query.Error: %s\n", mysql_error(conn));
 		success=-1;
@@ -203,7 +214,7 @@ int select_transform_config(int route_id)
 }
 
 
-int check_new_request()
+int check_new_request(int id)
 {
 	int success = 0;
 
@@ -220,7 +231,7 @@ int check_new_request()
 	}
 
 	
-	sprintf(query, CHECK_NEW_REQUEST);
+	sprintf(query, CHECK_NEW_REQUEST, id);
 	/* Execute SQL query.*/
 	if (mysql_query(conn, query))
 	{
