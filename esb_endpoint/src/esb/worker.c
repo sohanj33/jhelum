@@ -4,6 +4,8 @@
 #include "bmd_parser.h"
 #include <mysql.h>
 #include "database.h"
+#include <stdlib.h>
+#include <string.h>
 
 
 int fetch_new_request_from_db(int id)
@@ -51,20 +53,41 @@ void *poll_database_for_new_requets(void *vargp)
          * are any newly received BMD requets.
          */
         //Execute
-       
-        /*Query to see rows with status = available*/
+	
         int ID;
-        mysql_query(conn, "SELECT id FROM esb_request WHERE status = 'available' ORDER BY id LIMIT 1");
+        char SENDER[50];
+        char DEST[50];
+        char MTYPE[50];	
+	       
+        /*Query to see rows with status = available*/
+        
+        mysql_query(conn, "SELECT id, sender_id, dest_id, message_type FROM esb_request WHERE status = 'available' ORDER BY id LIMIT 1");
         res = mysql_store_result(conn);
         int columns = mysql_num_fields(res);
 	 
 	 printf("Entries in the table esb_request with status = available :\n");
 	 while((row = mysql_fetch_row(res)))
 	 {
-	   for (int i = 0; i < columns; i++)
+	   for (int i = 0; i < 4; i++)
 	   {
-	     //printf("%s ", row[i] ? row[i] : "NULL");
-	     ID = atoi(row[i]);
+	     printf("%s ", row[i] ? row[i] : "NULL");
+	     switch(i){
+			case 0:     
+		     		ID = atoi(row[i]);
+		     		break;
+		     	
+			case 1:     
+		     		strcpy(SENDER, row[i]);
+		     		break;
+		     		
+			case 2:     
+		     		strcpy(DEST, row[i]);
+		     		break;
+		     		
+			case 3:     
+		     		strcpy(MTYPE,row[i]);
+		     		break;
+     		}
 	   }
 	   printf("\n");
 	 }
@@ -92,13 +115,23 @@ void *poll_database_for_new_requets(void *vargp)
               * 5. Cleanup
               */
               
-                printf("Applying transformation and transporting steps.\n");
+              /*Step 1: Change status from available to taken*/
+              
+		change_available_to_taken(ID);
+              
+              /*Step 2: Find if there is any tranformation to be applied*/
+             
+		check_transform(MTYPE);
+              	
+                printf("\nApplying transformation and transporting steps.\n");
+                
+               
             }
         /**
          * Sleep for polling interval duration, say, 5 second.
          * DO NOT hard code it here!
          */
-        printf("Sleeping for 5 seconds.\n");
-        sleep(5);
+        printf("Sleeping for 8 seconds.\n");
+        sleep(8);
     }
 }
