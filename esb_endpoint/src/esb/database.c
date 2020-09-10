@@ -64,6 +64,7 @@ int insert_in_esb_request(BMD *bmd)
 			bmd->bmd_envelope->MessageID,
 			received_on
 			,status);
+			
 
 	printf("\n\n%s\n\n", query1);
 
@@ -240,6 +241,37 @@ int check_new_request(int id)
 	{
 		success =-1;
 	}
+
+	/* free results */
+	mysql_free_result(res);
+	return success;
+}
+
+void change_available_to_taken(int id)
+{
+	int success = 0;
+
+	MYSQL *conn;
+	MYSQL_RES *res;
+	MYSQL_ROW row;
+	char query[5000];
+	conn = mysql_init(NULL);
+
+	/* Connect to database */
+	if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
+	{
+		printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
+	}
+
+	
+	sprintf(query, AVAILABLE_TO_TAKEN, id);
+	/* Execute SQL query.*/
+	if (mysql_query(conn, query))
+	{
+		printf("Failed to execute query. Error: %s\n", mysql_error(conn));
+	}
+
+	res = mysql_store_result(conn);
 
 	/* free results */
 	mysql_free_result(res);
