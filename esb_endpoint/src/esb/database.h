@@ -7,7 +7,10 @@
 #define SELECT_TRANSFORM_CONFIG "SELECT * FROM transform_config WHERE route_id='%d'"
 #define CHECK_NEW_REQUEST "SELECT * FROM esb_request WHERE status = 'available' AND id='%d' LIMIT 1" 
 #define AVAILABLE_TO_TAKEN "UPDATE esb_request SET status = 'taken'  WHERE id='%d'"  
-
+#define GET_routeid "SELECT route_id FROM routes WHERE sender = '%s' AND destination = '%s' AND message_type= '%s'"
+#define GET_transformvalue "SELECT config_value FROM transform_config WHERE route_id='%d'"
+#define GET_tranformkey "SELECT config_key FROM transform_config WHERE route_id='%d'"
+#define Update_tranport_key "UPDATE transport_config set config_key = '%s' WHERE route_id = 1"
 
 #define server "localhost"
 #define user "splunk_user"
