@@ -10,7 +10,6 @@
 #define GET_routeid "SELECT route_id FROM routes WHERE sender = '%s' AND destination = '%s' AND message_type= '%s'"
 #define GET_transformvalue "SELECT config_value FROM transform_config WHERE route_id='%d'"
 #define GET_tranformkey "SELECT config_key FROM transform_config WHERE route_id='%d'"
-#define Update_tranport_key "UPDATE transport_config set config_key = '%s' WHERE route_id = 1"
 
 #define server "localhost"
 #define user "splunk_user"
