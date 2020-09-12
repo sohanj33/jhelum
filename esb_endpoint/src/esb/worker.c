@@ -117,13 +117,19 @@ void *poll_database_for_new_requets(void *vargp)
               
               /*Step 1: Change status from available to taken*/
               
-		change_available_to_taken(ID);
+		//change_available_to_taken(ID);
               
               /*Step 2: Find if there is any tranformation to be applied*/
              
-		check_transform(MTYPE);
-              	
-                printf("\nApplying transformation and transporting steps.\n");
+		int route_id = get_route_id(SENDER, DEST, MTYPE);
+		//char *transform_value = get_transform_value(route_id);
+		
+	
+        
+	      
+       
+		
+		printf("\nApplying transformation and transporting steps.\n");
                 
                
             }

@@ -24,7 +24,6 @@ BMD *parse_bmd_xml(char *bmd_file_path)
 static int is_bmd_valid(BMD *bmd)
 { 
   int valid = 1; // valid =>1 , -ve for error.
-
   //If any of the envelope values are NULL the BMD is invalid.
   if (bmd->bmd_envelope->MessageID == NULL ||
       bmd->bmd_envelope->Sender == NULL ||
@@ -38,7 +37,6 @@ static int is_bmd_valid(BMD *bmd)
     valid = 0;
     return valid;
   }
-
   //If MessageID is not a GUID BMD is invalid
   if (check_if_string_is_guid(bmd->bmd_envelope->MessageID) != 1)
     return 0;
@@ -62,7 +60,7 @@ static int is_bmd_valid(BMD *bmd)
       valid = 1;
     else
       valid = 0;
-
+    printf("I am valid 1:: %d",valid);
     return valid;
   }
   else
@@ -70,7 +68,7 @@ static int is_bmd_valid(BMD *bmd)
 
   if (sizeof(bmd->bmd_payload->data) > 5000000)
     valid = 0;
-
+  printf("I am valid 2:: %d",valid);
   return valid;
 }
 /**
