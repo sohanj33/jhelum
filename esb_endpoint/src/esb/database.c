@@ -308,7 +308,7 @@ int get_route_id(char SENDER[], char DEST[], char MTYPE[])
 	return route_id;
 }
 
-char* get_transform_value(int route_id)
+void get_transform_value(int route_id, char* value)
 {
 
 	MYSQL *conn;
@@ -333,17 +333,12 @@ char* get_transform_value(int route_id)
 
 	res = mysql_store_result(conn);
 	row = mysql_fetch_row(res);
-	char *value;
-	value = strdup(row[0]);
-	printf("\nvalue: %s\n",value);
+	
+	strcat(value,strdup(row[0]));
 
 	/* free results */
 	mysql_free_result(res);
 	
-	/*check if transformation is needed*/
-	
-	check_transform(value);
-	//return value;
 }
 
 void add_payload(char Payload_value[])
