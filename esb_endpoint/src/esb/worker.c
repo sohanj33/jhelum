@@ -130,7 +130,7 @@ void *poll_database_for_new_requets(void *vargp)
 		printf("\nvalue: %s\n",transform_value);
 		
 		/* Check if transformation is required */
-		check_transform(transform_value);
+		check_transform(transform_value,route_id);
 		
 		
 		printf("\nApplying transformation and transporting steps.\n");
