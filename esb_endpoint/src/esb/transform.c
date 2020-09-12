@@ -2,12 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-void check_transform(char type[])
+void check_transform(char type[], int route_id)
 {
 	if(!strcmp(type,"json"))
 	{
 		printf("\nNeed transformation\n");
-		no_transform();
+		no_transform(route_id);
+		//add route_id
 	}
 	else
 	{
@@ -17,7 +18,7 @@ void check_transform(char type[])
 	
 }
 
-void no_transform()
+void no_transform(int route_id)
 {
 	char temp[100];
 	FILE *fp = fopen("Payload.json", "r");
@@ -49,6 +50,6 @@ void no_transform()
 	
 	printf("\nPayload:\t%s\n",payload);
 	
-	add_payload(payload);
+	add_payload(payload, route_id);
 	
 }
