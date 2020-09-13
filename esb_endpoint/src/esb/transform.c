@@ -2,21 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-void check_transform(char type[], int route_id, char* transport_key)
-{
-	if(!strcmp(type,"Json_transform"))
-	{
-		printf("\nNeed transformation\n");
-		Json_transform(route_id, transport_key);
-	}
-	else
-	{
-		printf("\nNo transformation needed\n");
-		
-	}
-	
-}
-
 void Json_transform(int route_id, char* transport_key)
 {
 	char temp[100];
@@ -50,5 +35,20 @@ void Json_transform(int route_id, char* transport_key)
 	printf("\nPayload:\t%s\n",payload);
 	
 	add_payload(payload, route_id, transport_key);
+	
+}
+
+void check_transform(char type[], int route_id, char* transport_key)
+{
+	if(!strcmp(type,"Json_transform"))
+	{
+		printf("\nNeed transformation\n");
+		Json_transform(route_id, transport_key);
+	}
+	else
+	{
+		printf("\nNo transformation needed\n");
+		
+	}
 	
 }
