@@ -7,7 +7,7 @@ Apply_transport_service(char URL[], char transport_service[])
 	if(!strcmp(transport_service,"HTTP"))
 	{
 		printf("\nHTTP service applied\n");
-		printf("\nURL: %s \n",URL);
+		send_http_request(URL);
 	}
 	else
 	{
@@ -15,5 +15,4 @@ Apply_transport_service(char URL[], char transport_service[])
 	}
 	
 }
-
 
