@@ -148,9 +148,9 @@ int select_transport_config(int route_id)
 		printf("Failed to execute query. Error: %s\n", mysql_error(conn));
 	}
     
-	res = mysql_store_result(conn);
+	res = mysql_use_result(conn);
 
-	if (res->row_count >= 1)
+	if (res->field_count >= 1)
 	{
 		success=1;
 	}
@@ -189,7 +189,7 @@ int select_transform_config(int route_id)
 		printf("Failed to execute quesry. Error: %s\n", mysql_error(conn));
 	}
 
-	res = mysql_store_result(conn);
+	res = mysql_use_result(conn);
 	printf("%s\n %d\n ",query,res->row_count);
 	if (res->row_count >= 1)
 	{
@@ -232,6 +232,7 @@ int check_new_request(int id)
 
 	res = mysql_store_result(conn);
         int retval = mysql_num_rows(res);
+	printf("\nrows:\t%d\n",retval);
 	if (retval >0)
 	{
 		success=1;
@@ -307,7 +308,7 @@ int get_route_id(char SENDER[], char DEST[], char MTYPE[])
 	return route_id;
 }
 
-void get_transform_value(int route_id, char* value)
+void get_transform_key(int route_id, char* key)
 {
 
 	MYSQL *conn;
@@ -323,7 +324,7 @@ void get_transform_value(int route_id, char* value)
 	}
 
 	/*Get transform config_value*/
-	sprintf(query, GET_transformvalue, route_id);
+	sprintf(query, GET_transformkey, route_id);
 	/* Execute SQL query.*/
 	if (mysql_query(conn, query))
 	{
@@ -333,14 +334,14 @@ void get_transform_value(int route_id, char* value)
 	res = mysql_store_result(conn);
 	row = mysql_fetch_row(res);
 	
-	strcat(value,strdup(row[0]));
+	strcpy(key,strdup(row[0]));
 
 	/* free results */
 	mysql_free_result(res);
 	
 }
 
-void add_payload(char Payload_value[], int route_id)
+void add_payload(char Payload_value[], int route_id, char* transport_key)
 {
 	MYSQL *conn;
 	MYSQL_RES *res;
@@ -355,7 +356,7 @@ void add_payload(char Payload_value[], int route_id)
 	}
 
 	/* Get transform config_key */ 
-	sprintf(query, GET_tranformkey, route_id);
+	sprintf(query, GET_transportkey, route_id);
 	/* Execute SQL query.*/
 	if (mysql_query(conn, query))
 	{
@@ -365,18 +366,48 @@ void add_payload(char Payload_value[], int route_id)
 	res = mysql_store_result(conn);
 	row = mysql_fetch_row(res);
 	
-	char URL[100];
-	strcpy(URL,row[0]);
+	strcpy(transport_key,row[0]);
 	
 	for(int i=0;i<strlen(Payload_value);i++)
 	{
 		char ch = Payload_value[i];
-		strncat(URL, &ch, 1);
+		strncat(transport_key, &ch, 1);
 	}
 	
 	/* free results */
 	mysql_free_result(res);
 	
-	printf("\n%s\n",URL);
 }
 
+void get_transport_value(int route_id, char* transport_value)
+{
+
+	MYSQL *conn;
+	MYSQL_RES *res;
+	MYSQL_ROW row;
+	char query[5000];
+	conn = mysql_init(NULL);
+
+	/* Connect to database */
+	if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
+	{
+		printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
+	}
+
+	/*Get transform config_value*/
+	sprintf(query, GET_transportvalue, route_id);
+	/* Execute SQL query.*/
+	if (mysql_query(conn, query))
+	{
+		printf("Failed to execute query. Error: %s\n", mysql_error(conn));
+	}
+
+	res = mysql_store_result(conn);
+	row = mysql_fetch_row(res);
+	
+	strcpy(transport_value,strdup(row[0]));
+
+	/* free results */
+	mysql_free_result(res);
+	
+}
