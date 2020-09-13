@@ -119,15 +119,19 @@ void *poll_database_for_new_requets(void *vargp)
               
 		//change_available_to_taken(ID);
               
-              /*Step 2: Find if there is any tranformation to be applied*/
+              /*Step 2: Transformation steps: */
              
-		int route_id = get_route_id(SENDER, DEST, MTYPE);
-		//char *transform_value = get_transform_value(route_id);
+		/*Find the route_id for which transformation is to applied*/
+		int route_id = select_active_route(SENDER, DEST, MTYPE);
 		
-	
-        
-	      
-       
+		/*Get the config_value to check for transformation*/
+		char transform_value[20];
+		get_transform_value(route_id, transform_value);
+		printf("\nvalue: %s\n",transform_value);
+		
+		/* Check if transformation is required */
+		check_transform(transform_value);
+		
 		
 		printf("\nApplying transformation and transporting steps.\n");
                 
@@ -137,7 +141,8 @@ void *poll_database_for_new_requets(void *vargp)
          * Sleep for polling interval duration, say, 5 second.
          * DO NOT hard code it here!
          */
-        printf("Sleeping for 8 seconds.\n");
-        sleep(8);
+        printf("Sleeping for 5 seconds.\n");
+        sleep(5);
     }
 }
+

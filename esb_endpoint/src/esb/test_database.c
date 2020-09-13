@@ -27,7 +27,6 @@ test_select_transform_config(const MunitParameter params[], void *fixture)
 {
   int x=select_transform_config(1);
   munit_assert_int(x, ==,1);
-
 }
 
 

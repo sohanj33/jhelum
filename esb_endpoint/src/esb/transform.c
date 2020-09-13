@@ -58,4 +58,3 @@ void check_transform(char type[])
 	}
 	
 }
-

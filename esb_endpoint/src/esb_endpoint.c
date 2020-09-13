@@ -84,6 +84,7 @@ int esb_endpoint(struct http_request *req)
 		{
 			//TODO: Take suitable action
 			printf("ESB failed to process the BMD.\n");
+			http_response(req, 400, NULL, 0);
 			return (KORE_RESULT_ERROR);
 		}
 	}
