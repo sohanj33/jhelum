@@ -340,7 +340,7 @@ void get_transform_value(int route_id, char* value)
 	
 }
 
-void add_payload(char Payload_value[])
+void add_payload(char Payload_value[], int route_id)
 {
 	MYSQL *conn;
 	MYSQL_RES *res;
@@ -355,7 +355,7 @@ void add_payload(char Payload_value[])
 	}
 
 	/* Get transform config_key */ 
-	sprintf(query, GET_tranformkey, 1);
+	sprintf(query, GET_tranformkey, route_id);
 	/* Execute SQL query.*/
 	if (mysql_query(conn, query))
 	{
@@ -364,6 +364,7 @@ void add_payload(char Payload_value[])
 
 	res = mysql_store_result(conn);
 	row = mysql_fetch_row(res);
+	
 	char URL[100];
 	strcpy(URL,row[0]);
 	
@@ -376,20 +377,6 @@ void add_payload(char Payload_value[])
 	/* free results */
 	mysql_free_result(res);
 	
-	/* Update transport config_key */
-	sprintf(query, Update_tranport_key, URL);
-	
-	/* Execute SQL query.*/
-	if (mysql_query(conn, query))
-	{
-		printf("Failed to execute query. Error: %s\n", mysql_error(conn));
-	}
-
-	res = mysql_store_result(conn);
-	
-	/* free results */
-	mysql_free_result(res);
-	
-	//printf("\n%s\n",URL);
+	printf("\n%s\n",URL);
 }
 
