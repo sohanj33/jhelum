@@ -8,12 +8,13 @@
 #define CHECK_NEW_REQUEST "SELECT * FROM esb_request WHERE status = 'available' AND id='%d' LIMIT 1" 
 #define AVAILABLE_TO_TAKEN "UPDATE esb_request SET status = 'taken'  WHERE id='%d'"  
 #define GET_routeid "SELECT route_id FROM routes WHERE sender = '%s' AND destination = '%s' AND message_type= '%s'"
-#define GET_transformvalue "SELECT config_value FROM transform_config WHERE route_id='%d'"
-#define GET_tranformkey "SELECT config_key FROM transform_config WHERE route_id='%d'"
+#define GET_transformkey "SELECT config_key FROM transform_config WHERE route_id='%d'"
+#define GET_transportkey "SELECT config_key FROM transport_config WHERE route_id='%d'"
+#define GET_transportvalue "SELECT config_value FROM transport_config WHERE route_id='%d'"
 
 #define server "localhost"
-#define user "root"
-#define password "Akshay12#$"
+#define user "splunk_user"
+#define password "password"
 #define database "esb_db"
 #define port 3306
 
