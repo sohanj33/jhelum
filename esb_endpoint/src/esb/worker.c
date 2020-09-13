@@ -114,7 +114,7 @@ void *poll_database_for_new_requets(void *vargp)
               *    of this step.
               * 5. Cleanup
               */
-              
+               printf("\nApplying transformation and transporting steps.\n");
               /*Step 1: Change status from available to taken*/
               
 		//change_available_to_taken(ID);
@@ -122,19 +122,34 @@ void *poll_database_for_new_requets(void *vargp)
               /*Step 2: Transformation steps: */
              
 		/*Find the route_id for which transformation is to applied*/
-		int route_id = select_active_route(SENDER, DEST, MTYPE);
+		int route_id = get_route_id(SENDER, DEST, MTYPE);
 		
-		/*Get the config_value to check for transformation*/
-		char transform_value[20];
-		get_transform_value(route_id, transform_value);
-		printf("\nvalue: %s\n",transform_value);
+		/*Get the config_key to check for transformation*/
+		char transform_key[50];
+		get_transform_key(route_id, transform_key);
+		printf("\ntransform key: %s\n",transform_key);
 		
-		/* Check if transformation is required */
-		check_transform(transform_value,route_id);
+		/* Check if transformation is required and get transport key */
+		char transport_key[50];
+		check_transform(transform_key,route_id,transport_key);
+		printf("\ntransport key: %s\n",transport_key);
 		
+             /* Step 3: Transportation steps: */
+             
+		/* Get for transport service value */
+		char transport_value[50];
+		get_transport_value(route_id, transport_value);
+		printf("\ntransport value: %s\n",transport_value);
 		
-		printf("\nApplying transformation and transporting steps.\n");
+		/* Check & Apply the transport service */
+                Apply_transport_service(transport_key, transport_value);
                 
+            /* Step 4: Check and update the status
+            
+            //To be implemented
+            
+            /* Step 5: Cleanup */
+             //To be implemented
                
             }
         /**
