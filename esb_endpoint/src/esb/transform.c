@@ -2,7 +2,27 @@
 #include <stdlib.h>
 #include <string.h>
 
-void Json_transform(int route_id, char* transport_key)
+void check_transform(char type[], int route_id, char* transport_key, char* transport_value)
+{
+	if((!strcmp(type,"Json_transform"))&&(!strcmp(transport_value,"HTTP")))
+	{
+		printf("\nHTTP_Json transformation\n");
+		HTTP_Json_transform(route_id, transport_key);
+	}
+	else if((!strcmp(type,"Json_transform"))&&(!strcmp(transport_value,"email")))
+	{	
+		printf("\nEmail_Json transformation\n");
+		get_emailID(route_id, transport_key);
+	}
+	else
+	{
+		printf("\nNo transformation needed\n");
+		
+	}
+	
+}
+
+void HTTP_Json_transform(int route_id, char* transport_key)
 {
 	char temp[100];
 	FILE *fp = fopen("Payload.json", "r");
@@ -35,20 +55,5 @@ void Json_transform(int route_id, char* transport_key)
 	printf("\nPayload:\t%s\n",payload);
 	
 	add_payload(payload, route_id, transport_key);
-	
-}
-
-void check_transform(char type[], int route_id, char* transport_key)
-{
-	if(!strcmp(type,"Json_transform"))
-	{
-		printf("\nNeed transformation\n");
-		Json_transform(route_id, transport_key);
-	}
-	else
-	{
-		printf("\nNo transformation needed\n");
-		
-	}
 	
 }
