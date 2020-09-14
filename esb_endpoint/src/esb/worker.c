@@ -129,17 +129,19 @@ void *poll_database_for_new_requets(void *vargp)
 		get_transform_key(route_id, transform_key);
 		printf("\ntransform key: %s\n",transform_key);
 		
-		/* Check if transformation is required and get transport key */
-		char transport_key[50];
-		check_transform(transform_key,route_id,transport_key);
-		printf("\ntransport key: %s\n",transport_key);
+		/* Check if transformation is required */
 		
-             /* Step 3: Transportation steps: */
-             
 		/* Get for transport service value */
 		char transport_value[50];
 		get_transport_value(route_id, transport_value);
 		printf("\ntransport value: %s\n",transport_value);
+		
+		/* Get for transport service key */
+		char transport_key[50];
+		check_transform(transform_key,route_id,transport_key, transport_value);
+		printf("\ntransport key: %s\n",transport_key);
+		
+             /* Step 3: Transportation steps: */
 		
 		/* Check & Apply the transport service */
                 Apply_transport_service(transport_key, transport_value);
