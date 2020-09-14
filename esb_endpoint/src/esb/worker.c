@@ -117,7 +117,7 @@ void *poll_database_for_new_requets(void *vargp)
                printf("\nApplying transformation and transporting steps.\n");
               /*Step 1: Change status from available to taken*/
               
-		//change_available_to_taken(ID);
+		change_available_to_taken(ID);
               
               /*Step 2: Transformation steps: */
              
@@ -146,9 +146,12 @@ void *poll_database_for_new_requets(void *vargp)
 		/* Check & Apply the transport service */
                 Apply_transport_service(transport_key, transport_value);
                 
-            /* Step 4: Check and update the status
-            
-            //To be implemented
+            /* Step 4: Check and update the status */
+            	
+            	/*Change status taken to done*/
+            	
+            	change_taken_to_done(ID);
+               
             
             /* Step 5: Cleanup */
              //To be implemented
