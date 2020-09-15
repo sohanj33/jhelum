@@ -1,15 +1,18 @@
 #include<stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-void xml2json(char Pay[])
+void xml2json(char Pay[], char Sender[])
 {
-	char filename[] = "Payload.json";
+	char *filename;
+	strcpy(filename, Sender);
+	strcat(filename, "Payload.json");
         FILE *file;
     	file = fopen(filename,"w");
     	
     	if(file == NULL) 
     	{
-        	printf("file opening filed");
+        	printf("file opening failed");
         	exit(0);
     	}
     	

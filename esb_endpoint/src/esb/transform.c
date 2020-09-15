@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-void check_transform(char type[], int route_id, char* transport_key, char* transport_value)
+void check_transform(char type[], int route_id, char* transport_key, char* transport_value, char* SENDER)
 {
 	if((!strcmp(type,"Json_transform"))&&(!strcmp(transport_value,"HTTP")))
 	{
 		printf("\nHTTP_Json transformation\n");
-		HTTP_Json_transform(route_id, transport_key);
+		HTTP_Json_transform(route_id, transport_key, SENDER);
 	}
 	else if((!strcmp(type,"Json_transform"))&&(!strcmp(transport_value,"email")))
 	{	
@@ -22,10 +22,17 @@ void check_transform(char type[], int route_id, char* transport_key, char* trans
 	
 }
 
-void HTTP_Json_transform(int route_id, char* transport_key)
+void HTTP_Json_transform(int route_id, char* transport_key, char *SENDER)
 {
 	char temp[100];
-	FILE *fp = fopen("Payload.json", "r");
+	char* filename;
+	strcpy(filename, SENDER);
+	strcat(filename, "Payload.json");
+	FILE *fp = fopen(filename, "r");
+	fp = fopen(filename, "r");
+   	
+   	if (fp == NULL)
+      		  return;
 	
 	int i=0;
 	char c = fgetc(fp); 
