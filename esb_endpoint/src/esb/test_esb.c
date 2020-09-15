@@ -13,8 +13,10 @@
  * test_abc_setup and test_abc_tear_down respectively.
  */
 
-/*gcc test_esb.c munit.c bmd_parser.c database.c esb.c  `mysql_config --cflags --libs` `xml2-config --cflags --libs` -o test_esb
- */
+/*gcc test_esb.c munit.c bmd_parser.c database.c esb.c  `mysql_config --cflags --libs` `xml2-config --cflags --libs` -o test_esb */
+
+/*gcc test_esb.c munit.c bmd_parser.c database.c esb.c transport.c ../adapter/http.c ../adapter/email.c `mysql_config --cflags --libs` `xml2-config --cflags --libs` -lcurl -o test_esb*/
+
 static void *
 test_parse_bmd_xml_setup(const MunitParameter params[], void *user_data)
 {
@@ -207,6 +209,33 @@ test_HTTP_transport_service(const MunitParameter params[], void *fixture)
     return MUNIT_OK;
 }
 
+/* Test function for HTTP transport service */
+static MunitResult
+test_HTTP_transport_service(const MunitParameter params[], void *fixture)
+{
+	int status = Apply_transport_service("https://ifsc.razorpay.com/HDFC0CAGSBK", "HTTP");
+	munit_assert_int(status, ==,1);
+	return MUNIT_OK;
+}
+
+/* Test function for email transport service */
+static MunitResult
+test_email_transport_service(const MunitParameter params[], void *fixture)
+{
+	int status = Apply_transport_service("jhelumnho2020@gmail.com", "email");
+	munit_assert_int(status, ==,1);
+	return MUNIT_OK;
+}
+
+/* Test function for no transport service */
+static MunitResult
+test_no_transport_service(const MunitParameter params[], void *fixture)
+{
+	int status = Apply_transport_service("URL", "service");
+	munit_assert_int(status, ==,0);
+	return MUNIT_OK;
+}
+
 /* Put all unit tests here. */
 MunitTest esb_tests[] = {
     {
@@ -244,6 +273,22 @@ MunitTest esb_tests[] = {
     {
         "/http_transport_test",                  /* name */
         test_HTTP_transport_service,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+    {
+        "/email_transport_test",                  /* name */
+        test_email_transport_service,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+    {
+        "/no_transport_test",                  /* name */
+        test_no_transport_service,            /* test function */
         NULL,           /* setup function for the test */
         NULL,       /* tear_down */
         MUNIT_TEST_OPTION_NONE,            /* options */
