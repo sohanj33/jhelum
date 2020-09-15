@@ -86,7 +86,7 @@ int insert_in_esb_request(BMD *bmd)
 //Returns route_id if an active route exists for a given sender , destination and message type
 int select_active_route(const unsigned char *Sender, const unsigned char *Destination,const unsigned char *MessageType)
 {
-	int success = 0;
+	int route;
 
 	MYSQL *conn;
 	MYSQL_RES *res;
@@ -95,8 +95,7 @@ int select_active_route(const unsigned char *Sender, const unsigned char *Destin
 	conn = mysql_init(NULL);
 
 	/* Connect to database */
-	if (!mysql_real_connect(conn, server,
-							user, password, database, 0, NULL, 0))
+	if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
 	{
 		printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
 	}
@@ -109,18 +108,12 @@ int select_active_route(const unsigned char *Sender, const unsigned char *Destin
 		printf("Failed to execute quesry. Error: %s\n", mysql_error(conn));
 	}
 
-	res = mysql_use_result(conn);
-	if ((row = mysql_fetch_row(res)) != NULL)
-	{
-			success = atoi(row[0]);
-	}
-	else
-	{
-		success = -1;
-	}
+	res = mysql_store_result(conn);
+	row = mysql_fetch_row(res);
+	route = atoi(row[0]);
 
 	mysql_free_result(res);
-	return success;
+	return route;
 }
 
 int select_transport_config(int route_id)
@@ -134,8 +127,7 @@ int select_transport_config(int route_id)
 	conn = mysql_init(NULL);
 
 	/* Connect to database */
-	if (!mysql_real_connect(conn, server,
-							user, password, database, 0, NULL, 0))
+	if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
 	{
 		printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
 	}
@@ -148,15 +140,16 @@ int select_transport_config(int route_id)
 		printf("Failed to execute query. Error: %s\n", mysql_error(conn));
 	}
     
-	res = mysql_use_result(conn);
-
-	if (res->field_count >= 1)
+	res = mysql_store_result(conn);
+	int retval = mysql_num_rows(res);
+	//printf("%s\n %d\n ",query,res->row_count);
+	if (retval >0)
 	{
 		success=1;
 	}
 	else
 	{
-		success = -1;
+		success =-1;
 	}
 
 	/* free results */
@@ -189,9 +182,10 @@ int select_transform_config(int route_id)
 		printf("Failed to execute quesry. Error: %s\n", mysql_error(conn));
 	}
 
-	res = mysql_use_result(conn);
-	printf("%s\n %d\n ",query,res->row_count);
-	if (res->row_count >= 1)
+	res = mysql_store_result(conn);
+	int retval = mysql_num_rows(res);
+	//printf("%s\n %d\n ",query,res->row_count);
+	if (retval >0)
 	{
 		success=1;
 	}
@@ -232,7 +226,7 @@ int check_new_request(int id)
 
 	res = mysql_store_result(conn);
         int retval = mysql_num_rows(res);
-	printf("\nrows:\t%d\n",retval);
+	//printf("\nrows:\t%d\n",retval);
 	if (retval >0)
 	{
 		success=1;
