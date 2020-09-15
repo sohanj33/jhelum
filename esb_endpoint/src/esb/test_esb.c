@@ -1,4 +1,3 @@
-
 #include "munit.h"
 #include "esb.h"
 #include <string.h>
@@ -7,14 +6,17 @@
 #include <stdio.h>
 #include "bmd_parser.h"
 #include "test_database.c"
+#include "xmljson.c"
 /**
  * If the name of a test function is "test_abc" then you should
  * define the setup and teardown functions by the names:
  * test_abc_setup and test_abc_tear_down respectively.
  */
 
-/*gcc test_esb.c munit.c bmd_parser.c database.c esb.c  `mysql_config --cflags --libs` `xml2-config --cflags --libs` -o test_esb
- */
+/*gcc test_esb.c munit.c bmd_parser.c database.c esb.c  `mysql_config --cflags --libs` `xml2-config --cflags --libs` -o test_esb */
+
+/*gcc test_esb.c munit.c bmd_parser.c database.c esb.c transport.c ../adapter/http.c ../adapter/email.c `mysql_config --cflags --libs` `xml2-config --cflags --libs` -lcurl -o test_esb*/
+
 static void *
 test_parse_bmd_xml_setup(const MunitParameter params[], void *user_data)
 {
@@ -103,35 +105,6 @@ test_parse_bmd_xml(const MunitParameter params[], void *fixture)
     return MUNIT_OK;
 }
 
-/* Test setup function for Payload.Json Filesize */
-static void *
-test_filesize_setup(const MunitParameter params[], void *user_data)
-{
-  char file[] = "Payload.json";
-  int *p=malloc(sizeof(int *));
-  *p = get_filesize(file);
-  return p;
-  
-}
-
-/* Teardown */
-static void
-test_filesize_tear_down(void *fixture)
-{
-
-  free(fixture);
-}
-
-/* Test function for Payload.Json Filesize */
-static MunitResult
-test_filesize(const MunitParameter params[], void *fixture)
-{
-  int *filesize = (int *)fixture;
-  
-  munit_assert_int(filesize, <, 5000000);
-
-  return MUNIT_OK;
-}
 
 /* Define the setup and the test for test2 */
 static void *
@@ -167,6 +140,36 @@ test2_parse_bmd_xml(const MunitParameter params[], void *fixture)
     return MUNIT_OK;
 }
 
+/* Test setup function for Payload.Json Filesize */
+static void *
+test_filesize_setup(const MunitParameter params[], void *user_data)
+{
+  char file[] = "Payload.json";
+  int *p=malloc(sizeof(int *));
+  *p = get_filesize(file);
+  return p;
+  
+}
+
+/* Teardown */
+static void
+test_filesize_tear_down(void *fixture)
+{
+
+  free(fixture);
+}
+
+/* Test function for Payload.Json Filesize */
+static MunitResult
+test_filesize(const MunitParameter params[], void *fixture)
+{
+  int *filesize = (int *)fixture;
+  
+  munit_assert_int(filesize, <, 5000000);
+
+  return MUNIT_OK;
+}
+
 /* Test setup function for JSON filecontent */
 static void *
 Json_filecontents_setup(const MunitParameter params[], void *user_data)
@@ -198,6 +201,33 @@ test_Json_filecontents(const MunitParameter params[], void *fixture)
 }
 
 
+/* Test function for HTTP transport service */
+static MunitResult
+test_HTTP_transport_service(const MunitParameter params[], void *fixture)
+{
+	int status = Apply_transport_service("https://ifsc.razorpay.com/HDFC0CAGSBK", "HTTP");
+	munit_assert_int(status, ==,1);
+	return MUNIT_OK;
+}
+
+/* Test function for email transport service */
+static MunitResult
+test_email_transport_service(const MunitParameter params[], void *fixture)
+{
+	int status = Apply_transport_service("jhelumnho2020@gmail.com", "email");
+	munit_assert_int(status, ==,1);
+	return MUNIT_OK;
+}
+
+/* Test function for no transport service */
+static MunitResult
+test_no_transport_service(const MunitParameter params[], void *fixture)
+{
+	int status = Apply_transport_service("URL", "service");
+	munit_assert_int(status, ==,0);
+	return MUNIT_OK;
+}
+
 /* Put all unit tests here. */
 MunitTest esb_tests[] = {
     {
@@ -225,70 +255,47 @@ MunitTest esb_tests[] = {
       NULL                         /*parameters*/
     },
     {
-        "/filesize_test",                  /* name */
+        "/filecontents_test",                  /* name */
         test_Json_filecontents,            /* test function */
         Json_filecontents_setup,           /* setup function for the test */
         Json_filecontents_tear_down,       /* tear_down */
         MUNIT_TEST_OPTION_NONE,            /* options */
         NULL                               /* parameters */
     },
+    {
+        "/http_transport_test",                  /* name */
+        test_HTTP_transport_service,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+    {
+        "/email_transport_test",                  /* name */
+        test_email_transport_service,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+    {
+        "/no_transport_test",                  /* name */
+        test_no_transport_service,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
     {NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}};  /* Mark the end of the array with an entry where 
                                                                   the test * function is NULL */
   
-//Put all unit tests here
-MunitTest database_tests[] = {
-    {
-        "/test_select_active_route",        /* name */
-        test_select_active_route,           /* test function */
-        NULL,     /* setup function for the test */
-        NULL, /* tear_down */
-        MUNIT_TEST_OPTION_NONE,       /* options */
-        NULL                          /* parameters */
-    },
-    {
-        "/test_select_transport_config",        /* name */
-        test_select_transport_config,           /* test function */
-        NULL,     /* setup function for the test */
-        NULL, /* tear_down */
-        MUNIT_TEST_OPTION_NONE,       /* options */
-        NULL                          /* parameters */
-
-      
-    },
-    {
-        "/test_select_transform_config",        /* name */
-        test_select_transform_config,           /* test function */
-        NULL,     /* setup function for the test */
-        NULL, /* tear_down */
-        MUNIT_TEST_OPTION_NONE,       /* options */
-        NULL                          /* parameters */
-
-      
-    },
-
-    {
-        NULL,NULL,NULL,NULL,MUNIT_TEST_OPTION_NONE,NULL
-    }};
-
-
-static const MunitSuite database_suite = {
-    "/test_suite_databse",      /* name */
-    database_tests,              /* tests */
-    NULL,                   /* suites */
-    1,                      /* iterations */
-    MUNIT_SUITE_OPTION_NONE /* options */
-};
-
-
-
-
 
 
 /* Arrange the test cases into a test suite. */
 static const MunitSuite suite = {
     "/test_suite_esb",      /* name */
     esb_tests,              /* tests */
-    &database_suite,                   /* suites */
+    NULL,                   /* suites */
     1,                      /* iterations */
     MUNIT_SUITE_OPTION_NONE /* options */
 };
