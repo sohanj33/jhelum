@@ -17,11 +17,11 @@ void tranform_bmd_Credit_svc(void* ptr) { printf("Transformation for Credit serv
 void transport_bmd_Credit_svc(void* ptr) { printf("Transport for Credit service\n"); }
 void transform_bmd_IFSC_svc(void *ptr)
 {
-   printf("Hello");
+   printf("IFSC Service Transform");
 }
 void transport_bmd_IFSC_svc(void *ptr)
 {
-    printf("Hello again");
+    printf("IFSC Service Transport");
 }
 /* The ESB would have this table */
 const static struct

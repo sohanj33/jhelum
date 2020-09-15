@@ -98,6 +98,7 @@ int select_active_route(const unsigned char *Sender, const unsigned char *Destin
 	if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
 	{
 		printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
+		return -1;
 	}
 
 	/* Execute SQL query to fetch all table names.*/
@@ -106,6 +107,7 @@ int select_active_route(const unsigned char *Sender, const unsigned char *Destin
 	if (mysql_query(conn, query))
 	{
 		printf("Failed to execute quesry. Error: %s\n", mysql_error(conn));
+		return -1;
 	}
 
 	res = mysql_store_result(conn);
@@ -130,6 +132,7 @@ int select_transport_config(int route_id)
 	if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
 	{
 		printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
+		return -1;
 	}
 
 	/* Execute SQL query to fetch all table names.*/
@@ -138,6 +141,7 @@ int select_transport_config(int route_id)
 	if (mysql_query(conn, query))
 	{
 		printf("Failed to execute query. Error: %s\n", mysql_error(conn));
+		return -1;
 	}
     
 	res = mysql_store_result(conn);
@@ -172,6 +176,7 @@ int select_transform_config(int route_id)
 							user, password, database, 0, NULL, 0))
 	{
 		printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
+		return -1;
 	}
 
 	
@@ -180,6 +185,7 @@ int select_transform_config(int route_id)
 	if (mysql_query(conn, query))
 	{
 		printf("Failed to execute quesry. Error: %s\n", mysql_error(conn));
+		return -1;
 	}
 
 	res = mysql_store_result(conn);
@@ -214,6 +220,7 @@ int check_new_request(int id)
 	if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
 	{
 		printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
+		return -1;
 	}
 
 	
@@ -222,6 +229,7 @@ int check_new_request(int id)
 	if (mysql_query(conn, query))
 	{
 		printf("Failed to execute query. Error: %s\n", mysql_error(conn));
+		return -1;
 	}
 
 	res = mysql_store_result(conn);
@@ -254,6 +262,7 @@ void change_available_to_taken(int id)
 	if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
 	{
 		printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
+		return;
 	}
 
 	
@@ -262,6 +271,7 @@ void change_available_to_taken(int id)
 	if (mysql_query(conn, query))
 	{
 		printf("Failed to execute query. Error: %s\n", mysql_error(conn));
+		return;
 	}
 
 	res = mysql_store_result(conn);
@@ -283,6 +293,7 @@ void change_taken_to_done(int id)
 	if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
 	{
 		printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
+		return;
 	}
 
 	
@@ -291,6 +302,7 @@ void change_taken_to_done(int id)
 	if (mysql_query(conn, query))
 	{
 		printf("Failed to execute query. Error: %s\n", mysql_error(conn));
+		return;
 	}
 
 	res = mysql_store_result(conn);
@@ -312,6 +324,7 @@ int get_route_id(char SENDER[], char DEST[], char MTYPE[])
 	if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
 	{
 		printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
+		return -1;
 	}
 
 	
@@ -320,6 +333,7 @@ int get_route_id(char SENDER[], char DEST[], char MTYPE[])
 	if (mysql_query(conn, query))
 	{
 		printf("Failed to execute query. Error: %s\n", mysql_error(conn));
+		return -1;
 	}
 
 	res = mysql_store_result(conn);
@@ -344,6 +358,7 @@ void get_transform_key(int route_id, char* key)
 	if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
 	{
 		printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
+		return;
 	}
 
 	/*Get transform config_value*/
@@ -352,6 +367,7 @@ void get_transform_key(int route_id, char* key)
 	if (mysql_query(conn, query))
 	{
 		printf("Failed to execute query. Error: %s\n", mysql_error(conn));
+		return;
 	}
 
 	res = mysql_store_result(conn);
@@ -376,6 +392,7 @@ void add_payload(char Payload_value[], int route_id, char* transport_key)
 	if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
 	{
 		printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
+		return;
 	}
 
 	/* Get transform config_key */ 
@@ -384,6 +401,7 @@ void add_payload(char Payload_value[], int route_id, char* transport_key)
 	if (mysql_query(conn, query))
 	{
 		printf("Failed to execute query. Error: %s\n", mysql_error(conn));
+		return;
 	}
 
 	res = mysql_store_result(conn);
@@ -414,6 +432,7 @@ void get_emailID(int route_id, char* transport_key)
 	if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
 	{
 		printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
+		return;
 	}
 
 	/* Get transform config_key */ 
@@ -422,6 +441,7 @@ void get_emailID(int route_id, char* transport_key)
 	if (mysql_query(conn, query))
 	{
 		printf("Failed to execute query. Error: %s\n", mysql_error(conn));
+		return;
 	}
 
 	res = mysql_store_result(conn);
@@ -447,6 +467,7 @@ void get_transport_value(int route_id, char* transport_value)
 	if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0))
 	{
 		printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
+		return;
 	}
 
 	/*Get transform config_value*/
@@ -455,6 +476,7 @@ void get_transport_value(int route_id, char* transport_value)
 	if (mysql_query(conn, query))
 	{
 		printf("Failed to execute query. Error: %s\n", mysql_error(conn));
+		return;
 	}
 
 	res = mysql_store_result(conn);
