@@ -123,10 +123,22 @@ void *poll_database_for_new_requets(void *vargp)
              
 		/*Find the route_id for which transformation is to applied*/
 		int route_id = get_route_id(SENDER, DEST, MTYPE);
+		if(route_id==NULL)
+		{
+			change_status_to_error(ID);
+			return;
+		}
 		
 		/*Get the config_key to check for transformation*/
 		char transform_key[50];
 		get_transform_key(route_id, transform_key);
+		
+		if(transform_key==NULL)
+		{
+			change_status_to_error(ID);
+			return;
+		}
+		
 		printf("\ntransform key: %s\n",transform_key);
 		
 		/* Check if transformation is required */
@@ -134,17 +146,36 @@ void *poll_database_for_new_requets(void *vargp)
 		/* Get for transport service value */
 		char transport_value[50];
 		get_transport_value(route_id, transport_value);
+		
+		if(transport_value==NULL)
+		{
+			change_status_to_error(ID);
+			return;
+		}
+		
 		printf("\ntransport value: %s\n",transport_value);
 		
 		/* Get for transport service key */
 		char transport_key[50];
 		check_transform(transform_key,route_id,transport_key, transport_value, SENDER);
+		
+		if(transport_key==NULL)
+		{
+			change_status_to_error(ID);
+			return;
+		}
+		
 		printf("\ntransport key: %s\n",transport_key);
 		
              /* Step 3: Transportation steps: */
 		
 		/* Check & Apply the transport service */
-                Apply_transport_service(transport_key, transport_value);
+                int transport_status = Apply_transport_service(transport_key, transport_value);
+                if(transport_status==0)
+		{
+			change_status_to_error(ID);
+			return;
+		}
                 
             /* Step 4: Check and update the status */
             	
