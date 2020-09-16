@@ -2,22 +2,24 @@
 #include <stdlib.h>
 #include <string.h>
 
-void check_transform(char type[], int route_id, char* transport_key, char* transport_value, char* SENDER)
+int check_transform(char type[], int route_id, char* transport_key, char* transport_value, char* SENDER)
 {
 	if((!strcmp(type,"Json_transform"))&&(!strcmp(transport_value,"HTTP")))
 	{
-		printf("\nHTTP_Json transformation\n");
+		printf("\nApplying HTTP_Json transformation\n");
 		HTTP_Json_transform(route_id, transport_key, SENDER);
+		return 1;
 	}
 	else if((!strcmp(type,"Json_transform"))&&(!strcmp(transport_value,"email")))
 	{	
-		printf("\nEmail_Json transformation\n");
+		printf("\nApplying Email_Json transformation\n");
 		get_emailID(route_id, transport_key);
+		return 1;
 	}
 	else
 	{
 		printf("\nNo transformation needed\n");
-		
+		return 0;
 	}
 	
 }
