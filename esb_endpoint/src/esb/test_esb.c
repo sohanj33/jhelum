@@ -113,7 +113,7 @@ test2_parse_bmd_xml_setup(const MunitParameter params[], void *user_data)
     char cwd[100];
     getcwd(cwd, sizeof(cwd));
     char path[100];
-    sprintf(path, "%s/Test_files/%s", cwd,"HelloABC.xml");
+    sprintf(path, "%s/Test_files/%s", cwd,"bmd.xml");
     
     return strdup(path);
 }
@@ -200,14 +200,6 @@ test_Json_filecontents(const MunitParameter params[], void *fixture)
   return MUNIT_OK;
 }
 
-/* Test function for HTTP transport service */
-static MunitResult
-test_HTTP_transport_service(const MunitParameter params[], void *fixture)
-{
-	int status = 1;
-	munit_assert_int(status, ==,1);
-    return MUNIT_OK;
-}
 
 /* Test function for HTTP transport service */
 static MunitResult
@@ -233,6 +225,67 @@ test_no_transport_service(const MunitParameter params[], void *fixture)
 {
 	int status = Apply_transport_service("URL", "service");
 	munit_assert_int(status, ==,0);
+	return MUNIT_OK;
+}
+
+/* Test function for HTTP Json transform */
+static MunitResult
+test_HTTP_Json_transform(const MunitParameter params[], void *fixture)
+{
+	char type[] = "Json_transform"; 
+	int route_id = 1; 
+	char* transport_key; 
+	char* transport_value = "HTTP"; 
+	char* SENDER;
+	int transform_status = check_transform(type,route_id,transport_key,transport_value,SENDER);
+	munit_assert_int(transform_status, ==,1);
+	return MUNIT_OK;
+}
+
+/* Test function for email Json transform */
+static MunitResult
+test_email_Json_transform(const MunitParameter params[], void *fixture)
+{
+	char type[] = "Json_transform"; 
+	int route_id = 1; 
+	char* transport_key; 
+	char* transport_value = "email"; 
+	char* SENDER;
+	int transform_status = check_transform(type,route_id,transport_key,transport_value,SENDER);
+	munit_assert_int(transform_status, ==,1);
+	return MUNIT_OK;
+}
+
+/* Test function for no Json transform */
+static MunitResult
+test_no_transform(const MunitParameter params[], void *fixture)
+{
+	char type[] = ""; 
+	int route_id = 1; 
+	char* transport_key; 
+	char* transport_value = ""; 
+	char* SENDER;
+	int transform_status = check_transform(type,route_id,transport_key,transport_value,SENDER);
+	munit_assert_int(transform_status, ==,0);
+	return MUNIT_OK;
+}
+
+/* Test function for Send HTTP request */
+static MunitResult
+test_HTTP_request(const MunitParameter params[], void *fixture)
+{
+	char *URL = "https://ifsc.razorpay.com/HDFC0CAGSBK";
+	int HTTP_status = send_http_request(URL);
+	munit_assert_int(HTTP_status, ==,0);//0 means OK
+	return MUNIT_OK;
+}
+
+/* Test function for Send email */
+static MunitResult
+test_send_email(const MunitParameter params[], void *fixture)
+{
+	int mail_status = send_mail("jhelumnho2020@gmail.com", "Payload.json");
+	munit_assert_int(mail_status, ==,0); //0 means OK
 	return MUNIT_OK;
 }
 
@@ -289,6 +342,46 @@ MunitTest esb_tests[] = {
     {
         "/no_transport_test",                  /* name */
         test_no_transport_service,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+    {
+        "/HTTP_Json_transform_test",                  /* name */
+        test_HTTP_Json_transform,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+     {
+        "/email_Json_transform_test",                  /* name */
+        test_email_Json_transform,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+    {
+        "/no_transform_test",                  /* name */
+        test_no_transform,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+    {
+        "/HTTP_request_test",                  /* name */
+        test_HTTP_request,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+    {
+        "/send_email_test",                  /* name */
+        test_send_email,            /* test function */
         NULL,           /* setup function for the test */
         NULL,       /* tear_down */
         MUNIT_TEST_OPTION_NONE,            /* options */
