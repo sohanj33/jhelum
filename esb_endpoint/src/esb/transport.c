@@ -9,6 +9,7 @@ int Apply_transport_service(char URL[], char transport_service[])
 	{
 		printf("\nHTTP service applied\n");
 		send_http_request(URL);
+		return status;
 	}
 	else if(!strcmp(transport_service,"email"))
 	{
@@ -18,9 +19,15 @@ int Apply_transport_service(char URL[], char transport_service[])
 		printf("\nemail service applied\n");
 		int mail_status = send_mail(URL, filename);
 		if(mail_status==0)
+		{
 			printf("Mail sent\n");
+			return status;
+		}
 		else
+		{
 			printf("Failed to send the Mail\n");
+			status = 0;
+		}
 	}
 	else
 	{
