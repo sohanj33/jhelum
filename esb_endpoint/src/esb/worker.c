@@ -157,9 +157,9 @@ void *poll_database_for_new_requets(void *vargp)
 		
 		/* Get for transport service key */
 		char transport_key[50];
-		check_transform(transform_key,route_id,transport_key, transport_value, SENDER);
+		int transform_status = check_transform(transform_key,route_id,transport_key, transport_value, SENDER);
 		
-		if(transport_key==NULL)
+		if(transport_key==NULL||transform_status==0)
 		{
 			change_status_to_error(ID);
 			return;
