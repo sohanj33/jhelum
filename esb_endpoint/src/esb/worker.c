@@ -6,7 +6,9 @@
 #include "database.h"
 #include <stdlib.h>
 #include <string.h>
+#include <semaphore.h> 
 
+pthread_mutex_t lock;
 
 int fetch_new_request_from_db(int id)
 {
@@ -44,10 +46,10 @@ void *poll_database_for_new_requets(void *vargp)
         printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
     }
 
-    int i = 0;
-    while (i < 99)
+    pthread_mutex_lock(&lock);
+    while (!mysql_query(conn, "SELECT id, sender_id, dest_id, message_type FROM esb_request WHERE status = 'available' ORDER BY id LIMIT 1"))
     {
-        i++;
+    	
         /**
          * Step 2: Query the esb_requests table to see if there
          * are any newly received BMD requets.
@@ -61,7 +63,7 @@ void *poll_database_for_new_requets(void *vargp)
 	       
         /*Query to see rows with status = available*/
         
-        mysql_query(conn, "SELECT id, sender_id, dest_id, message_type FROM esb_request WHERE status = 'available' ORDER BY id LIMIT 1");
+        //mysql_query(conn, "SELECT id, sender_id, dest_id, message_type FROM esb_request WHERE status = 'available' ORDER BY id LIMIT 1");
         res = mysql_store_result(conn);
         int columns = mysql_num_fields(res);
 	 
@@ -188,12 +190,39 @@ void *poll_database_for_new_requets(void *vargp)
              //To be implemented
                
             }
-        /**
-         * Sleep for polling interval duration, say, 5 second.
-         * DO NOT hard code it here!
-         */
+            else
+            {
+            	pthread_mutex_unlock(&lock); 
+            	break;
+            }
+        /* Sleep for polling interval duration, say, 5 second.*/
+       
         printf("Sleeping for 5 seconds.\n");
         sleep(5);
     }
+     pthread_mutex_unlock(&lock); 
+}
+
+pthread_t t1,t2,t3;
+
+void call_threads()
+{
+	
+	// Start threads for task polling
+	pthread_create(&t1, NULL, poll_database_for_new_requets, NULL);
+	pthread_create(&t2, NULL, poll_database_for_new_requets, NULL);
+	pthread_create(&t3, NULL, poll_database_for_new_requets, NULL);
+	pthread_join(t1,NULL); 
+    	pthread_join(t2,NULL); 
+    	pthread_join(t3,NULL); 
+    	pthread_mutex_destroy(&lock);
+    	
+}
+
+void cancel_threads()
+{
+	pthread_cancel(t1);
+	pthread_cancel(t2);
+	pthread_cancel(t3);
 }
 
