@@ -372,6 +372,71 @@ test_get_transform_key(const MunitParameter params[], void *fixture)
    return MUNIT_OK;
 }
 
+/* Test function to check get_transform_key Test 1 */
+static MunitResult
+test_get_transport_key_T1(const MunitParameter params[], void *fixture)
+{
+   	char Payload_value[] = "HDFC0CAGSBK";
+	int route_id = 1; 
+	char transport_key[50]; 
+	char url[] = "https://ifsc.razorpay.com/HDFC0CAGSBK";
+	add_payload(Payload_value,route_id, transport_key);
+	
+	munit_assert_string_equal(transport_key,url);
+	return MUNIT_OK;
+}
+
+/* Test function to check get_transform_key Test 2 */
+static MunitResult
+test_get_transport_key_T2(const MunitParameter params[], void *fixture)
+{
+  char transport_key[70];
+  char type[] = "Json_transform"; 
+  int route_id = 2;  
+  char* transport_value = "email"; 
+  char* SENDER;
+
+  int check = check_transform(type,route_id,transport_key,transport_value,SENDER);
+
+   munit_assert_string_equal(transport_key,"jhelumnho2020@gmail.com");
+   return MUNIT_OK;
+}
+
+/* Test function to check get_transform_key Test 3 */
+static MunitResult
+test_get_transport_key_T3(const MunitParameter params[], void *fixture)
+{
+   char transport_key[70];
+   int route_id = 2;  
+
+   get_emailID(route_id,transport_key);
+
+   munit_assert_string_equal(transport_key,"jhelumnho2020@gmail.com");
+   return MUNIT_OK;
+}
+
+/* Test function to check get_transform_value Test 1 */
+static MunitResult
+test_get_transport_value_T1(const MunitParameter params[], void *fixture)
+{
+   char transport_value[50];
+   get_transport_value(1, transport_value);
+
+   munit_assert_string_equal(transport_value,"HTTP");
+   return MUNIT_OK;
+}
+
+/* Test function to check get_transform_value Test 2 */
+static MunitResult
+test_get_transport_value_T2(const MunitParameter params[], void *fixture)
+{
+   char transport_value[50];
+   get_transport_value(2, transport_value);
+
+   munit_assert_string_equal(transport_value,"email");
+   return MUNIT_OK;
+}
+
 /* Put all unit tests here. */
 MunitTest esb_tests[] = {
     {
@@ -537,6 +602,46 @@ MunitTest esb_tests[] = {
     {
         "/get_transform_key_test",                  /* name */
         test_get_transform_key,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+     {
+        "/get_transport_key_T1_test",                  /* name */
+        test_get_transport_key_T1,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+    {
+        "/get_transport_key_T2_test",                  /* name */
+        test_get_transport_key_T2,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+     {
+        "/get_transport_key_T3_test",                  /* name */
+        test_get_transport_key_T3,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+    {
+        "/test_get_transport_value_T1_test",                  /* name */
+        test_get_transport_value_T1,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+    {
+        "/test_get_transport_value_T2_test",                  /* name */
+        test_get_transport_value_T2,            /* test function */
         NULL,           /* setup function for the test */
         NULL,       /* tear_down */
         MUNIT_TEST_OPTION_NONE,            /* options */
