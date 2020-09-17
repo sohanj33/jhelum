@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "bmd_parser.h"
-#include "test_database.c"
 #include "xmljson.c"
 /**
  * If the name of a test function is "test_abc" then you should
@@ -15,7 +14,7 @@
 
 /*gcc test_esb.c munit.c bmd_parser.c database.c esb.c  `mysql_config --cflags --libs` `xml2-config --cflags --libs` -o test_esb */
 
-/*gcc test_esb.c munit.c bmd_parser.c database.c esb.c transport.c ../adapter/http.c ../adapter/email.c `mysql_config --cflags --libs` `xml2-config --cflags --libs` -lcurl -o test_esb*/
+/*gcc test_esb.c munit.c bmd_parser.c database.c esb.c transport.c ../adapter/http.c ../adapter/email.c transform.c `mysql_config --cflags --libs` `xml2-config --cflags --libs` -lcurl -o test_esb*/
 
 static void *
 test_parse_bmd_xml_setup(const MunitParameter params[], void *user_data)
@@ -276,7 +275,7 @@ test_HTTP_request(const MunitParameter params[], void *fixture)
 {
 	char *URL = "https://ifsc.razorpay.com/HDFC0CAGSBK";
 	int HTTP_status = send_http_request(URL);
-	munit_assert_int(HTTP_status, ==,0);//0 means OK
+	munit_assert_int(HTTP_status, ==,1);
 	return MUNIT_OK;
 }
 
@@ -285,8 +284,92 @@ static MunitResult
 test_send_email(const MunitParameter params[], void *fixture)
 {
 	int mail_status = send_mail("jhelumnho2020@gmail.com", "Payload.json");
-	munit_assert_int(mail_status, ==,0); //0 means OK
+	munit_assert_int(mail_status, ==,0);
 	return MUNIT_OK;
+}
+
+/* Test function for active route */
+static MunitResult
+test_select_active_route(const MunitParameter params[], void *fixture)
+{
+  int x=select_active_route("756E2EAA-1D5B-4BC0-ACC4-4CEB669408DA","6393F82F-4687-433D-AA23-1966330381FE","CreditReport");
+  munit_assert_int(x, ==,1);
+  return MUNIT_OK;
+}
+
+
+/* Test function for transport config present for a route_id */
+static MunitResult
+test_select_transport_config(const MunitParameter params[], void *fixture)
+{
+  int x=select_transport_config(1);
+  munit_assert_int(x, ==,1);
+  return MUNIT_OK;
+}
+
+/* Test function for transport config not present for a route_id */
+static MunitResult
+test_select_transport_config_invalid(const MunitParameter params[], void *fixture)
+{
+  int x=select_transport_config(0);
+  munit_assert_int(x, ==,-1);
+  return MUNIT_OK;
+}
+
+/* Test function for transform config present for a route_id */
+static MunitResult
+test_select_transform_config(const MunitParameter params[], void *fixture)
+{
+  int x=select_transform_config(2);
+  munit_assert_int(x, ==,1);
+  return MUNIT_OK;
+}
+
+/* Test function for transport config not present for a route_id */
+static MunitResult
+test_select_transform_config_invalid(const MunitParameter params[], void *fixture)
+{
+  int x=select_transport_config(0);
+  munit_assert_int(x, ==,-1);
+  return MUNIT_OK;
+}
+
+/* Test function check new request for an id with status = available */
+static MunitResult
+test_check_new_request(const MunitParameter params[], void *fixture)
+{
+  int x=check_new_request(1045);
+  munit_assert_int(x, ==,1);
+  return MUNIT_OK;
+}
+
+/* Test function check new request for an id with status not available */
+static MunitResult
+test_check_new_request_invalid(const MunitParameter params[], void *fixture)
+{
+   int x=check_new_request(1);
+  munit_assert_int(x, ==,-1);
+  return MUNIT_OK;
+}
+
+/* Test function to get route_id */
+static MunitResult
+test_get_route_id(const MunitParameter params[], void *fixture)
+{
+   int x=get_route_id("756E2EAA-1D5B-4BC0-ACC4-4CEB669408DA","6393F82F-4687-433D-AA23-1966330381FE","CreditReport");
+   munit_assert_int(x, ==,1);
+   return MUNIT_OK;
+}
+
+/* Test function to check get_transform_key */
+static MunitResult
+test_get_transform_key(const MunitParameter params[], void *fixture)
+{
+   char transform_key[50];
+   get_transform_key(1, transform_key);
+
+   munit_assert_string_equal(transform_key,"Json_transform");
+   return MUNIT_OK;
 }
 
 /* Put all unit tests here. */
@@ -382,6 +465,78 @@ MunitTest esb_tests[] = {
     {
         "/send_email_test",                  /* name */
         test_send_email,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+    {
+        "/select_active_route_test",                  /* name */
+        test_select_active_route,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+    {
+        "/select_transport_config_test",                  /* name */
+        test_select_transport_config,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+    {
+        "/select_transport_config__invalid_test",                  /* name */
+        test_select_transport_config_invalid,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+    {
+        "/select_transform_config_test",                  /* name */
+        test_select_transform_config,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+    {
+        "/select_transport_config__invalid_test",                  /* name */
+        test_select_transform_config_invalid,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+    {
+        "/test_check_new_request_test",                  /* name */
+        test_check_new_request,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+    {
+        "/check_new_request_invalid_test",                  /* name */
+        test_check_new_request_invalid,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+    {
+        "/get_route_id_test",                  /* name */
+        test_get_route_id,            /* test function */
+        NULL,           /* setup function for the test */
+        NULL,       /* tear_down */
+        MUNIT_TEST_OPTION_NONE,            /* options */
+        NULL                               /* parameters */
+    },
+    {
+        "/get_transform_key_test",                  /* name */
+        test_get_transform_key,            /* test function */
         NULL,           /* setup function for the test */
         NULL,       /* tear_down */
         MUNIT_TEST_OPTION_NONE,            /* options */
