@@ -41,6 +41,7 @@
 #include <sys/stat.h>
 #include <limits.h>
 #include <stdio.h>
+#include <semaphore.h> 
 
 //#define PATH_MAX 500
 
@@ -78,13 +79,14 @@ int esb_endpoint(struct http_request *req)
 		{
 			//TODO: Take suitable action
 			printf("\nProcessing SQL Queries...\n");
+			call_threads();
+			cancel_threads();
 			return (KORE_RESULT_OK);
 		}
 		else
 		{
 			//TODO: Take suitable action
 			printf("ESB failed to process the BMD.\n");
-			http_response(req, 400, NULL, 0);
 			return (KORE_RESULT_ERROR);
 		}
 	}
@@ -283,20 +285,17 @@ cleanup:
 }
 
 //Needed to terminate the polling thread
-pthread_t thread_id;
+//sem_t mutex; 
+
 void kore_parent_configure(int argc, char *argv[])
 {
 	printf("\n%%%%%%%%%% kore_parent_configure\n");
-	// TODO: Start a new thread for task polling
-	pthread_create(&thread_id, NULL, poll_database_for_new_requets, NULL);
+	call_threads(); 
+    	return 0;
 }
 
 void kore_parent_teardown(void)
 {
 	printf(">>>> kore_parent_teardown\n");
-	/**
-	 * TODO: Terminate the task polling thread.
-	 * Instead of killing it, ask the thread to terminate itself.
-	 */
-	pthread_cancel(thread_id);
+	cancel_threads();
 }
