@@ -74,12 +74,6 @@ int send_mail(char * to, char * file_path) {
 
         curl_easy_setopt(curl, CURLOPT_USE_SSL, CURLUSESSL_ALL);
 
-        /** TODO: Security certificate to be added 
-         * for secure transport protocol 
-         */
-
-        //curl_easy_setopt(curl, CURLOPT_CAINFO, "/path/to/certificate.pem");
-
         /* FROM address */
         curl_easy_setopt(curl, CURLOPT_MAIL_FROM, FROM);
 
