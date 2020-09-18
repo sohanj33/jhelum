@@ -5,9 +5,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "bmd_parser.h"
-//#include "xmljson.c"
+//#include "xmljson.c" //Uncomment this when using munit testing
 
+/* To compile the test cases */
 /*gcc test_esb.c munit.c bmd_parser.c database.c esb.c transport.c ../adapter/http.c ../adapter/email.c transform.c `mysql_config --cflags --libs` `xml2-config --cflags --libs` -lcurl -o test_esb*/
+
+/* To run the test cases */
+/* ./test_esb */
 
 static void *
     test_parse_bmd_xml_setup(const MunitParameter params[], void * user_data) {
