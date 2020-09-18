@@ -106,9 +106,13 @@ This should create a database named esb_db with 4 tables.
 2. Set up your Username and Password by changing corresponding fields in database.h file in src directory.
 
 3. The tables in esb_db are as follows: 
-    i. esb_request table: (These are only some rows; The rows are added as you curl the bmd.xml)
+
+i. esb_request table: (These are only some rows; The rows are added as you curl the bmd.xml)
+    
     ```bash
     mysql> select * from esb_request;
+   ```
+   
  ```bash   
 +------+--------------------------------------+--------------------------------------+--------------+--------------------+--------------------------------------+---------------------+---------------+-----------+----------------+
 | id   | sender_id                            | dest_id                              | message_type | reference_id       | message_id                           | received_on         | data_location | status    | status_details |
@@ -118,5 +122,56 @@ This should create a database named esb_db with 4 tables.
 | 1180 | 222E2EAA-1D5B-5BC0-BCC4-4CEB669408DA | 2223D82F-4687-433D-AA23-1966330381FE | CreditReport | INV-PROFILE-889712 | F3ECAEF2-204A-3452-9553-043B6D25386E | 2020-08-12 10:48:00 | NULL          | available | NULL           |
 +------+--------------------------------------+--------------------------------------+--------------+--------------------+--------------------------------------+---------------------+---------------+-----------+----------------+
 3 rows in set (0.00 sec)
-   
-   ```
+```
+ii. routes table: (You need to add rows here before hand so that there is valid {SENDER, DESTINATION, MESSAGE_TYPE} for esb_request table
+
+```bash
+mysql> select * from routes;
++----------+--------------------------------------+--------------------------------------+--------------+----------------------+
+| route_id | sender                               | destination                          | message_type | is_active            |
++----------+--------------------------------------+--------------------------------------+--------------+----------------------+
+|        1 | 756E2EAA-1D5B-4BC0-ACC4-4CEB669408DA | 6393F82F-4687-433D-AA23-1966330381FE | CreditReport | 0x01                 |
+|        2 | 556E2EAA-1D5B-5BC0-BCC4-4CEB669408DA | 6323D82F-4687-433D-AA23-1966330381FE | DebitReport  | 0x01                 |
+|        3 | 666E2EAA-1D5B-5BC0-BCC4-4CEB669408DA | 8323D82F-4687-433D-AA23-1966330381FE | DebitReport  | 0x01                 |
+|        4 | 222E2EAA-1D5B-5BC0-BCC4-4CEB669408DA | 2223D82F-4687-433D-AA23-1966330381FE | CreditReport | 0x01                 |
+|       15 | 222E2EAA-1D5B-5BC0-BCC4-4CEB669408DA | 8323D82F-4687-433D-AA23-1966330381FE | CreditReport | 0x01                 |
+|       16 | 522E2EAA-2D5B-8BC0-FCC4-5CEB669408DA | 5223D82F-4657-333D-BA23-2966330381FE | CreditReport | 0x01                 |
++----------+--------------------------------------+--------------------------------------+--------------+----------------------+
+6 rows in set (0.01 sec)
+```
+
+iii. tranform_config: (These also need to be added with valid route_id that is present in routes table)
+
+```bash
+mysql> select * from transform_config;
++------+----------+----------------+--------------+
+| id   | route_id | config_key     | config_value |
++------+----------+----------------+--------------+
+| 1001 |        1 | Json_transform | json         |
+| 1002 |        2 | Json_transform | json         |
+| 1003 |        3 | Json_transform | json         |
+| 1004 |        4 | Json_transform | json         |
+| 1005 |       15 | Json_transform | json         |
+| 1006 |       16 | Json_transform | json         |
++------+----------+----------------+--------------+
+6 rows in set (0.01 sec)
+```
+
+iv. transport_config: (These also need to be added with valid route_id that is present in routes table)
+
+```bash
+mysql> select * from transport_config;
++------+----------+----------------------------+--------------+
+| id   | route_id | config_key                 | config_value |
++------+----------+----------------------------+--------------+
+| 2001 |        1 | https://ifsc.razorpay.com/ | HTTP         |
+| 2002 |        2 | jhelumnho2020@gmail.com    | email        |
+| 2003 |        3 | https://ifsc.razorpay.com/ | HTTP         |
+| 2004 |        4 | https://ifsc.razorpay.com/ | HTTP         |
+| 2005 |       15 | https://ifsc.razorpay.com/ | HTTP         |
+| 2006 |       16 | jhelumnho2020@gmail.com    | email        |
++------+----------+----------------------------+--------------+
+6 rows in set (0.01 sec)
+```
+
+
