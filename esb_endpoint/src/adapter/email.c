@@ -94,7 +94,7 @@ int send_mail(char * to, char * file_path) {
         //curl_easy_setopt(curl, CURLOPT_READFUNCTION, payload_source);
         FILE * fp = fopen(file_path, "r");
         curl_easy_setopt(curl, CURLOPT_READDATA, fp);
-        curl_easy_setopt(curl, CURLOPT_UPLOAD, 1 L);
+        curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
 
         /* Send the message */
         /* res =0 means everything is ok */
