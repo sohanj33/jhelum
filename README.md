@@ -181,8 +181,9 @@ mysql> select * from transport_config;
 1. Open the terminal in esb_endpoint. (Eg: /home/user/Documents/Jhelum/jhelum-master/esb_endpoint)
 2. Build kodev
 3. Run kodev
-4. If there is no requests, open a new terminal and run the following command:
+4. If there is no requests, open a new terminal window and run the following command:
   curl -k https://localhost:8888/bmd -F "bmd_file=@/your/working/directory/esb_endpoint/src/esb/Test_files/bmdT1.xml"
+  (The processing will take few seconds, so if you want to add another request do the same as above again in new terminal window)
 5. The bmd files are in Test_files
 6. For email serivce you need to enter the file name exactly with extension that you want to send (eg: "Payload.json")
 7. Also if you are sending email to your own account please refer to this: [less secure](https://devanswers.co/allow-less-secure-apps-access-gmail-account/)
