@@ -5,8 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "bmd_parser.h"
-#include "test_database.c"
-#include "xmljson.c"
+//#include "xmljson.c" //Uncomment this when using munit testing
 
 /*gcc test_esb.c munit.c bmd_parser.c database.c esb.c  `mysql_config --cflags --libs` `xml2-config --cflags --libs` -o test_esb
  */
