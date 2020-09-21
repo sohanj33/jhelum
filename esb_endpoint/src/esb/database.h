@@ -17,11 +17,6 @@
 #define GET_transportkey "SELECT config_key FROM transport_config WHERE route_id='%d'"
 #define GET_transportvalue "SELECT config_value FROM transport_config WHERE route_id='%d'"
 
-#define server "localhost"
-#define user "splunk_user"
-#define password "password"
-#define database "esb_db"
-#define port 3306
 
 int insert_in_esb_request(BMD * bmd);
 int select_active_route(const unsigned char * Sender, const unsigned char * Destination, const unsigned char * MessageType);

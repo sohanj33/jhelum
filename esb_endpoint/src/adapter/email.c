@@ -3,9 +3,9 @@
 #include <curl/curl.h>
 
 
-#define FROM "jhelumnho2020@gmail.com"
-#define TO "jhelumnho2020@gmail.com"
-#define CC "jhelumnho2020@gmail.com"
+#define FROM "rockyrohan890@gmail.com"
+#define TO "rockyrohan890@gmail.com"
+#define CC "rockyrohan890@gmail.com"
 
 struct upload_status {
     int lines_read;
@@ -66,8 +66,8 @@ int send_mail(char * to, char * file_path) {
     curl = curl_easy_init();
     if (curl) {
         /* Set username and password */
-        curl_easy_setopt(curl, CURLOPT_USERNAME, "jhelumnho2020");
-        curl_easy_setopt(curl, CURLOPT_PASSWORD, "jhelum@Nho2020");
+        curl_easy_setopt(curl, CURLOPT_USERNAME, "rockyrohan890@gmail.com");
+        curl_easy_setopt(curl, CURLOPT_PASSWORD, "rockyrohan890@8123");
 
         /* URL for mail server */
         curl_easy_setopt(curl, CURLOPT_URL, "smtp://smtp.gmail.com:587/");
