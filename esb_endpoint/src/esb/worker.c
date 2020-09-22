@@ -33,7 +33,7 @@ void * poll_database_for_new_requets(void * vargp) {
 
     /* Connect to database */
     if (!mysql_real_connect(conn, server,
-            "root", "root", database, 0, NULL, 0)) {
+            user, password, database, 0, NULL, 0)) {
         printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
     }
 

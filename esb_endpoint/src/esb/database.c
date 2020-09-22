@@ -4,12 +4,6 @@
 #include <stdlib.h>
 #include "bmd_parser.h"
 #include "database.h"
-#define server "localhost"
-#define user "root"
-#define password "root"
-#define database "esb_db"
-#define port 3306
-
 
 int insert_in_esb_request(BMD * bmd) {
     int success = 1; //1=>success , -ve for errors
@@ -310,7 +304,6 @@ int get_route_id(char SENDER[], char DEST[], char MTYPE[]) {
     res = mysql_store_result(conn);
     row = mysql_fetch_row(res);
     int route_id = atoi(row[0]);
-    printf("route_id is %d",route_id);
 
     /* free results */
     mysql_free_result(res);

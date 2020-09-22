@@ -5,12 +5,12 @@
  */
 
 #include <stdio.h>
-#include <libxml/xmlreader.h>
+#include <libxml2/libxml/xmlreader.h>
 #include "bmd_parser.h"
 #include <ctype.h>
 #include <string.h>
 
-#ifdef LIBXML_READER_ENABLED
+//#ifdef LIBXML_READER_ENABLED
 
 unsigned char ENVELOPE[] = "Envelop";
 unsigned char Payload[] = "Payload";
@@ -152,8 +152,8 @@ streamFile(const char * bmd_file_path, envelope * bmd_envelope, payload * bmd_pa
      */
     reader = xmlReaderForFile(bmd_file_path, NULL,
         XML_PARSE_DTDATTR | /* default DTD attributes */
-        XML_PARSE_NOENT  /* substitute entities */
-        ); /* validate with the DTD */
+        XML_PARSE_NOENT | /* substitute entities */
+        XML_PARSE_DTDVALID); /* validate with the DTD */
     if (reader != NULL) {
 
         ret = xmlTextReaderRead(reader);
@@ -206,10 +206,11 @@ BMD * process_xml(char * bmd_file_path) {
     xmlMemoryDump();
     return (bmd);
 }
-
+/*
 #else
 int processXML(void) {
     fprintf(stderr, "XInclude support not compiled in\n");
     exit(1);
 }
 #endif
+*/
