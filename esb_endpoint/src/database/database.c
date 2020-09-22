@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "bmd_parser.h"
+#include <../bmdParse/bmd_parser.h>
 #include "database.h"
 
 int insert_in_esb_request(BMD * bmd) {

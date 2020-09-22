@@ -5,7 +5,7 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "bmd_parser.h"
+#include <../bmdParse/bmd_parser.h>
 //#include "xmljson.c" //Uncomment this when using munit testing
 
 /* To compile the test cases */

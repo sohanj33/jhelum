@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "esb.h"
-#include "bmd_parser.h"
+#include <../bmdParse/bmd_parser.h>
 #include <mysql.h>
-#include "database.h"
+#include <../database/database.h>
 #include <stdlib.h>
 #include <string.h>
 #include <semaphore.h>
