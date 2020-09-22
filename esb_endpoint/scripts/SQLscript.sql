@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `esb_db`.`transport_config` (
   PRIMARY KEY (`id`),
   INDEX `route_idx` (`route_id` ASC),
   UNIQUE INDEX `UK_route_config` (`config_key` ASC, `route_id` ASC),
-  CONSTRAINT `route`
+  CONSTRAINT `route_id`
     FOREIGN KEY (`route_id`)
     REFERENCES `esb_db`.`routes` (`route_id`)
     ON DELETE NO ACTION

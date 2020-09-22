@@ -102,6 +102,7 @@ int select_active_route(const unsigned char * Sender,
     route = atoi(row[0]);
 
     mysql_free_result(res);
+    printf("route_id=%d\n",route);
     return route;
 }
 
