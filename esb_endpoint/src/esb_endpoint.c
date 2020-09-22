@@ -60,7 +60,7 @@ int esb_endpoint(struct http_request *req)
     {
         /* Invoke the ESB's main processing logic. */
         int esb_status = process_esb_request(epr.bmd_path);
-        if (esb_status >= 0)
+        if (esb_status == 0)
         {
             printf("\nProcessing SQL Queries...\n");
             /*
@@ -290,3 +290,4 @@ void kore_parent_teardown(void)
     printf(">>>> kore_parent_teardown\n");
     cancel_threads();
 }
+  
