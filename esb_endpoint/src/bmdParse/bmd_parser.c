@@ -152,8 +152,8 @@ streamFile(const char * bmd_file_path, envelope * bmd_envelope, payload * bmd_pa
      */
     reader = xmlReaderForFile(bmd_file_path, NULL,
         XML_PARSE_DTDATTR | /* default DTD attributes */
-        XML_PARSE_NOENT | /* substitute entities */
-        XML_PARSE_DTDVALID); /* validate with the DTD */
+        XML_PARSE_NOENT //| /* substitute entities */
+        /*XML_PARSE_DTDVALID*/); /* validate with the DTD */
     if (reader != NULL) {
 
         ret = xmlTextReaderRead(reader);

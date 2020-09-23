@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "bmd_parser.h"
+#include "../bmdParse/bmd_parser.h"
 #include "esb.h"
 #include <stdlib.h>
 
@@ -36,16 +36,19 @@ static int is_bmd_valid(BMD * bmd) {
         valid = 0;
         return valid;
     }
-
+	printf("valid=0");
     //If MessageID is not a GUID BMD is invalid
-    if (check_if_string_is_guid(bmd -> bmd_envelope -> MessageID) != 1)
-        return 0;
+    if (check_if_string_is_guid(bmd -> bmd_envelope -> MessageID) != 1){
+    	printf("check_if_string_is_guid(bmd -> bmd_envelope -> MessageID) == 1");
+        return 0;}
     //If Sender is not a GUID BMD is invalid
-    if (check_if_string_is_guid(bmd -> bmd_envelope -> Sender) != 1)
-        return 0;
+    if (check_if_string_is_guid(bmd -> bmd_envelope -> Sender) != 1){
+    	printf("check_if_string_is_guid(bmd -> bmd_envelope -> Sender) == 1");
+        return 0;}
     //If Destination is not a GUID BMD is invalid
-    if (check_if_string_is_guid(bmd -> bmd_envelope -> Destination) != 1)
-        return 0;
+    if (check_if_string_is_guid(bmd -> bmd_envelope -> Destination) != 1){
+    	printf("check_if_string_is_guid(bmd -> bmd_envelope -> Destination) == 1");
+        return 0;}
 
     /*If for given Sender , Destination and Message Type there is no
          Active route Present then the BMD is invalid.
@@ -57,6 +60,7 @@ static int is_bmd_valid(BMD * bmd) {
 
     if (select_transport_config(route_id) && select_transform_config(route_id))
         valid = 1;
+        
     else
         valid = 0;
 

@@ -1,10 +1,10 @@
-#include "munit.h"
+#include "../test/munit.h"
 #include "esb.h"
 #include <string.h>
 #include <dirent.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "bmd_parser.h"
+#include "../bmdParse/bmd_parser.h"
 //#include "xmljson.c" //Uncomment this when using munit testing
 
 /*gcc test_esb.c munit.c bmd_parser.c database.c esb.c  `mysql_config --cflags --libs` `xml2-config --cflags --libs` -o test_esb

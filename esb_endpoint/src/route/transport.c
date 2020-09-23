@@ -3,7 +3,7 @@
 #include <string.h>
 
 /* Apply transport service */
-int Apply_transport_service(char URL[], char transport_service[]) {
+int Apply_transport_service(char URL[], char transport_service[], char SENDER[]) {
     int status = 1;
     if (!strcmp(transport_service, "HTTP")) {
         printf("\nHTTP service applied\n");
@@ -11,8 +11,10 @@ int Apply_transport_service(char URL[], char transport_service[]) {
         return status;
     } else if (!strcmp(transport_service, "email")) {
         char filename[100];
+        strcpy(filename, SENDER);
+    	strcat(filename, "Payload.json");
         printf("Enter file to read:\t");
-        scanf("%s", & filename);
+        //scanf("%s", & filename);
         printf("\nemail service applied\n");
         int mail_status = send_mail(URL, filename);
         if (mail_status == 0) {
