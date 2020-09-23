@@ -1,5 +1,9 @@
 #include <stdio.h>
+<<<<<<< HEAD
 #include "../bmdParse/bmd_parser.h"
+=======
+#include "/home/sohan/Desktop/new_team3/jhelum/esb_endpoint/src/bmdParse/bmd_parser.h"
+>>>>>>> 991e76b09ec7a2ef213925c71fb6aecfed392a4e
 #include "esb.h"
 #include <stdlib.h>
 
@@ -38,7 +42,11 @@ static int is_bmd_valid(BMD * bmd) {
     }
 	printf("valid=0");
     //If MessageID is not a GUID BMD is invalid
+<<<<<<< HEAD
     if (check_if_string_is_guid(bmd -> bmd_envelope -> MessageID) != 1){
+=======
+    if (check_if_string_is_guid(bmd -> bmd_envelope -> MessageID) == 1){
+>>>>>>> 991e76b09ec7a2ef213925c71fb6aecfed392a4e
     	printf("check_if_string_is_guid(bmd -> bmd_envelope -> MessageID) == 1");
         return 0;}
     //If Sender is not a GUID BMD is invalid
