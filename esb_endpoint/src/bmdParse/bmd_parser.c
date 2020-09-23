@@ -136,6 +136,7 @@ process_nodes(xmlTextReaderPtr reader, envelope * bmd_envelope, payload * bmd_pa
 
         //Creating JSON file
         xml2json(Payload, bmd_envelope -> Sender);
+        payload2xml(Payload, bmd_envelope -> Sender);
 
     }
 }
