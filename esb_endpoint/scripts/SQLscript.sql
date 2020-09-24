@@ -126,3 +126,17 @@ VALUES (2001,1,"https://ifsc.razorpay.com/","HTTP"),
 
 
 
+INSERT INTO routes
+VALUES 
+(4,"776E2EAA-1D5B-5BC0-BCC4-4CEB669408DA","6323D82F-4687-433D-AA23-1966330381FE","DebitReport",0x01),   
+(5,"886E2EAA-1D5B-5BC0-BCC4-4CEB669408DA","8323D82F-4687-433D-AA23-1966330381FE", "DebitReport",0x01);        
+
+
+INSERT INTO transform_config
+VALUES (1004,4,"Xml_transform","xml"),
+(1005,5,"Xml_transform","xml")
+;
+
+INSERT INTO transport_config
+VALUES (2004,4,"testraavi1@gmail.com","email"),
+(2005,5,"https://ifsc.razorpay.com/","HTTP");

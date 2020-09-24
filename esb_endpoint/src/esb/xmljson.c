@@ -24,6 +24,28 @@ void xml2json(char Pay[], char Sender[]) {
     fclose(file);
 }
 
+void payload2xml(char Pay[], char Sender[]) {
+    char * filename;
+    strcpy(filename, Sender);
+    strcat(filename, "Payload.xml");
+    FILE * file;
+    file = fopen(filename, "w");
+
+    if (file == NULL) {
+        printf("file opening failed");
+        exit(0);
+    }
+	fprintf(file, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<?xml-stylesheet type='text/xsl'?>\n<payload>%s</payload>", Pay);
+    /* Writes into json file */
+    //fprintf(file, "{\n \"Payload\":\"%s\"\n}", Pay);
+
+    printf("\nPayload json File created\n");
+
+    /* Closes file */
+    fclose(file);
+}
+
+
 /* Get the filesize for a given filename */
 int get_filesize(char filename[]) {
     /*File size validation*/

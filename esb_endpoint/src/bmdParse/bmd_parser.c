@@ -136,6 +136,7 @@ process_nodes(xmlTextReaderPtr reader, envelope * bmd_envelope, payload * bmd_pa
 
         //Creating JSON file
         xml2json(Payload, bmd_envelope -> Sender);
+        payload2xml(Payload, bmd_envelope -> Sender);
 
     }
 }
@@ -152,8 +153,8 @@ streamFile(const char * bmd_file_path, envelope * bmd_envelope, payload * bmd_pa
      */
     reader = xmlReaderForFile(bmd_file_path, NULL,
         XML_PARSE_DTDATTR | /* default DTD attributes */
-        XML_PARSE_NOENT //| /* substitute entities */
-        /*XML_PARSE_DTDVALID*/); /* validate with the DTD */
+        XML_PARSE_NOENT | /* substitute entities */
+        XML_PARSE_DTDVALID); /* validate with the DTD */
     if (reader != NULL) {
 
         ret = xmlTextReaderRead(reader);
