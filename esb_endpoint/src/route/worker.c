@@ -140,10 +140,10 @@ void * poll_database_for_new_requets(void * vargp) {
                 return;
             }
 
-            printf("\ntransport key: %s\n", transport_key);
+            //printf("\ntransport key: %s\n", transport_key);
 
             /* Step 3: Transportation steps: */
-                        printf("\n--------------------------------%s---------------------------\n",transport_key);
+                        //printf("\n--------------------------------%s---------------------------\n",transport_key);
             /* Check & Apply the transport service */
             int transport_status = Apply_transport_service(transport_key, transport_value, SENDER, transform_key);
             if (transport_status == 0) {

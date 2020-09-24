@@ -26,8 +26,8 @@ int Apply_transport_service(char URL[], char transport_service[], char SENDER[],
             printf("Failed to send the Mail\n");
             status = 0;
         }
-     } 
-     	else if (! strcmp(transform_key,"Xml_transform")) {
+     }
+     else if (! strcmp(transform_key,"Xml_transform")) {
         char filename[100];
         strcpy(filename, SENDER);
     	strcat(filename, "Payload.xml");
@@ -43,6 +43,41 @@ int Apply_transport_service(char URL[], char transport_service[], char SENDER[],
             status = 0;
         }
      }
+    } 
+     else if (!strcmp(transport_service, "SFTP")){ 
+    	if(!strcmp(transform_key,"Xml_transform")){
+        char filename[100];
+        strcpy(filename, SENDER);
+    	strcat(filename, "Payload.xml");
+        printf("Enter file to read:\t");
+        //scanf("%s", & filename);
+        printf("\nSFTP service applied\n");
+        int sftp_status = sftp_upload(filename,filename);
+        if (sftp_status == 1) {
+            printf("File sent to sftp\n");
+            return status;
+        } else {
+            printf("Failed to send the file\n");
+            status = 0;
+        }
+     } 
+     else if(!strcmp(transform_key,"Json_transform")){
+        char filename[100];
+        strcpy(filename, SENDER);
+    	strcat(filename, "Payload.json");
+        printf("Enter file to read:\t");
+        //scanf("%s", & filename);
+        printf("\nSFTP service applied\n");
+        int sftp_status = sftp_upload(filename,filename);
+        if (sftp_status == 1) {
+            printf("File sent to sftp\n");
+            return status;
+        } else {
+            printf("Failed to send the file\n");
+            status = 0;
+        }
+     } 
+     	
     } else {
         status = 0;
         printf("\nNo service found\n");
