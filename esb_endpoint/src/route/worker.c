@@ -140,7 +140,7 @@ void * poll_database_for_new_requets(void * vargp) {
                 return;
             }
 
-            //printf("\ntransport key: %s\n", transport_key);
+            printf("\ntransport key: %s\n", transport_key);
 
             /* Step 3: Transportation steps: */
                         //printf("\n--------------------------------%s---------------------------\n",transport_key);
