@@ -10,7 +10,7 @@
 #include <ctype.h>
 #include <string.h>
 
-//#ifdef LIBXML_READER_ENABLED
+#ifdef LIBXML_READER_ENABLED
 
 unsigned char ENVELOPE[] = "Envelop";
 unsigned char Payload[] = "Payload";
@@ -207,11 +207,11 @@ BMD * process_xml(char * bmd_file_path) {
     xmlMemoryDump();
     return (bmd);
 }
-/*
+
 #else
 int processXML(void) {
     fprintf(stderr, "XInclude support not compiled in\n");
     exit(1);
 }
 #endif
-*/
+

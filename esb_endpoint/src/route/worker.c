@@ -8,6 +8,7 @@
 #include <string.h>
 #include <semaphore.h>
 
+#define NTHREADS 3
 /* Create a lock */
 pthread_mutex_t lock;
 
@@ -38,9 +39,10 @@ void * poll_database_for_new_requets(void * vargp) {
     }
 
     pthread_mutex_lock( & lock); //lock this section of code to avoid race conditon
+    printf("Thread number %ld\n", pthread_self());
 
     /* Query to see rows with status = available */
-    while (!mysql_query(conn, "SELECT id, sender_id, dest_id, message_type FROM esb_request WHERE status = 'available' ORDER BY id LIMIT 1")) {
+    while (!mysql_query(conn, "SELECT id, sender_id, dest_id, message_type FROM esb_request WHERE status = 'available' ")) {
 
         /**
          * Step 2: Query the esb_requests table to see if there
@@ -116,7 +118,7 @@ void * poll_database_for_new_requets(void * vargp) {
                 return;
             }
 
-            printf("\ntransform key: %s\n", transform_key);
+            //printf("\ntransform key: %s\n", transform_key);
 
             /* Check if transformation is required */
 
@@ -129,7 +131,7 @@ void * poll_database_for_new_requets(void * vargp) {
                 return;
             }
 
-            printf("\ntransport value: %s\n", transport_value);
+            //printf("\ntransport value: %s\n", transport_value);
 
             /* Get for transport service key */
             char transport_key[50];
@@ -140,7 +142,7 @@ void * poll_database_for_new_requets(void * vargp) {
                 return;
             }
 
-            printf("\ntransport key: %s\n", transport_key);
+            //printf("\ntransport key: %s\n", transport_key);
 
             /* Step 3: Transportation steps: */
                         //printf("\n--------------------------------%s---------------------------\n",transport_key);
@@ -163,30 +165,56 @@ void * poll_database_for_new_requets(void * vargp) {
         }
         /* Sleep for polling interval duration, say, 5 second.*/
 
-        printf("Sleeping for 5 seconds.\n");
-        sleep(5);
+        printf("------------------COMPLETED-------------------\n");
+        //sleep(5);
     }
     pthread_mutex_unlock( & lock); //unlock so that other threads can now access this section of code
 }
 
-/* Create threads for polling database */
-pthread_t t1, t2, t3;
 
+
+ pthread_t thread_id[NTHREADS];
+   int i, j;
 void call_threads() {
+   for(i=0; i < NTHREADS; i++)
+   {
+      pthread_create( &thread_id[i], NULL,poll_database_for_new_requets, NULL );
+   }
 
-    // Start threads for task polling
-    pthread_create( & t1, NULL, poll_database_for_new_requets, NULL);
-    pthread_create( & t2, NULL, poll_database_for_new_requets, NULL);
-    pthread_create( & t3, NULL, poll_database_for_new_requets, NULL);
-    pthread_join(t1, NULL);
-    pthread_join(t2, NULL);
-    pthread_join(t3, NULL);
-    pthread_mutex_destroy( & lock);
-
+   for(j=0; j < NTHREADS; j++)
+   {
+      pthread_join( thread_id[j], NULL); 
+   }
 }
 
 void cancel_threads() {
-    pthread_cancel(t1);
-    pthread_cancel(t2);
-    pthread_cancel(t3);
+   for(j=0; j < NTHREADS; j++)
+   {
+      pthread_cancel( thread_id[j], NULL); 
+   }
 }
+  
+/* Create threads for polling database */
+// pthread_t t1, t2, t3;
+
+// void call_threads() {
+
+//     // Start threads for task polling
+//     pthread_create( & t1, NULL, poll_database_for_new_requets, NULL);
+//     pthread_create( & t2, NULL, poll_database_for_new_requets, NULL);
+//     pthread_create( & t3, NULL, poll_database_for_new_requets, NULL);
+//     pthread_join(t1, NULL);
+//     pthread_join(t2, NULL);
+//     pthread_join(t3, NULL);
+//     pthread_mutex_destroy( & lock);
+
+// }
+
+// void cancel_threads() {
+
+
+
+//     pthread_cancel(t1);
+//     pthread_cancel(t2);
+//     pthread_cancel(t3);
+// }

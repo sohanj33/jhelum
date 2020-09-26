@@ -63,10 +63,6 @@ int esb_endpoint(struct http_request *req)
         if (esb_status == 0)
         {
             printf("\nProcessing SQL Queries...\n");
-            /*
-             * Call the threads for polling the database
-             * And process the new requests
-             */
             call_threads();
             cancel_threads();
             return (KORE_RESULT_OK);
