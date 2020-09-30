@@ -48,7 +48,7 @@ endpoint_result save_bmd(struct http_request *);
  * HTTP request handler function mapped in the conf file.
  */
 int esb_endpoint(struct http_request *req)
-{
+//starting flower brace is removed
     printf("Received the BMD request.\n") //semicolon is removed to check the code-inspector
     endpoint_result epr = save_bmd(req);
     if (epr.status < 0)
