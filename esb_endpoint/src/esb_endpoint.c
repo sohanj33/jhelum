@@ -49,7 +49,7 @@ endpoint_result save_bmd(struct http_request *);
  */
 int esb_endpoint(struct http_request *req)
 {
-    printf("Received the BMD request.\n");
+    printf("Received the BMD request.\n") //semicolon is removed to check the code-inspector
     endpoint_result epr = save_bmd(req);
     if (epr.status < 0)
     {
